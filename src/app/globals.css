@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+:root {
+  /* ---- Blueprint token system ---- */
+  --bp-bg: #0a1a2f;          /* deep blueprint navy */
+  --bp-bg-raised: #0f2340;    /* panel / card surface */
+  --bp-bg-raised-2: #132a4c;  /* hover / active surface */
+  --bp-line: #2c5d85;        /* grid + hairline rules */
+  --bp-line-soft: #1c3a5c;   /* faint grid */
+  --bp-ink: #e7edf5;         /* primary text, "white ink" */
+  --bp-ink-muted: #7f9ab5;   /* secondary text */
+  --bp-signal: #f2a65a;      /* amber highlighter accent, used sparingly */
+  --bp-signal-soft: rgba(242, 166, 90, 0.15);
+  --bp-cyan: #6fd6e8;        /* cool secondary accent */
+  --bp-success: #7fd88f;
+
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+@theme inline {
+  --color-bg: var(--bp-bg);
+  --color-bg-raised: var(--bp-bg-raised);
+  --color-bg-raised-2: var(--bp-bg-raised-2);
+  --color-line: var(--bp-line);
+  --color-line-soft: var(--bp-line-soft);
+  --color-ink: var(--bp-ink);
+  --color-ink-muted: var(--bp-ink-muted);
+  --color-signal: var(--bp-signal);
+  --color-cyan: var(--bp-cyan);
+  --color-success: var(--bp-success);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bp-bg);
+  color: var(--bp-ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--bp-signal);
+  color: var(--bp-bg);
+}
+
+/* Blueprint dot/grid backdrop, used behind sections */
+.bp-grid {
+  background-image:
+    linear-gradient(var(--bp-line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-line-soft) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+}
+
+.bp-grid-fine {
+  background-image:
+    linear-gradient(var(--bp-line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-line-soft) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+/* Registration / corner marks -- the signature motif */
+.bp-corners {
+  position: relative;
+}
+.bp-corners::before,
+.bp-corners::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+.bp-corners::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1.5px solid var(--bp-line);
+  border-left: 1.5px solid var(--bp-line);
+}
+.bp-corners::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1.5px solid var(--bp-line);
+  border-right: 1.5px solid var(--bp-line);
+}
+
+/* Monospace eyebrow / label utility */
+.bp-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  color: var(--bp-ink-muted);
+}
+
+.bp-hairline {
+  height: 1px;
+  background: var(--bp-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

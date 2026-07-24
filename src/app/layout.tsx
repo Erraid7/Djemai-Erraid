@@ -1,41 +1,32 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
   title: "DJEMAI Mohamed Erraid — Full-Stack Developer",
   description:
-    "Full-stack developer & systems builder — Next.js, TypeScript, PostgreSQL, and multi-agent AI systems. Team lead on ESI Flow, solo builder of Khatma, president of CSE.",
+    "A portfolio you interact with like an API client. Fire a request, see the response -- projects, skills, and experience for DJEMAI Mohamed Erraid, full-stack developer.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
-      >
+    <html lang="en" className="dark">
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         {children}
       </body>
     </html>

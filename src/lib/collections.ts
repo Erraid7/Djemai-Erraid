@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { User, FolderGit2, Wrench, BriefcaseBusiness, Mail, Lock } from "lucide-react";
+import { Home, UserRound, FolderGit2, Wrench, BriefcaseBusiness, Mail, Lock } from "lucide-react";
 
 export type CollectionItem = {
   method: "GET" | "POST";
@@ -14,7 +14,13 @@ export type Collection = {
 };
 
 export const collections: Collection[] = [
-  { label: "Profile", items: [{ method: "GET", url: "/api/me", icon: User }] },
+  {
+    label: "Profile",
+    items: [
+      { method: "GET", url: "/api/home", icon: Home },
+      { method: "GET", url: "/api/about", icon: UserRound },
+    ],
+  },
   {
     label: "Projects",
     items: [

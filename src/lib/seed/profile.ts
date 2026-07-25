@@ -13,10 +13,19 @@ export const profile = {
   phone: "+213 776 262 511",
   github: "https://github.com/Erraid7",
   linkedin: "https://www.linkedin.com/in/djemai-mohamed-erraid",
+  // Kept for the "About" narrative -- a couple of quick-read summary lines.
   bio: [
     "Third-year CS student who ships production systems rather than class exercises — ESI Flow is a live multi-role SaaS, Khatma is a solo-built cross-platform app, and Refactoring Swarm is an autonomous multi-agent pipeline.",
     "President of CSE (Club Scientifique de l'ESI), a 1,000+ member student tech club with 10 departments; organizer of the DATAHACK hackathon series; mentor at HACKIN and DevSprint hackathons.",
   ],
+  // Longer-form personal journey for the About view -- replace with your own
+  // voice/story. Each entry is a paragraph.
+  journey: [
+    "Placeholder: how you got into computer science -- what pulled you in, the first thing you built, why it stuck.",
+    "Placeholder: what led you to ESI, and what CSE / DATAHACK / mentoring has taught you about building things with other people, not just alone.",
+    "Placeholder: what you're chasing next -- the kind of problems or teams you want to work with this summer and beyond.",
+  ],
+  interests: ["Systems design", "Multi-agent AI", "Mentoring", "Hackathons", "Open source"],
 };
 
 export const languages = [

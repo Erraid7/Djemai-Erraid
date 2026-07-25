@@ -2,6 +2,8 @@ import { Lock } from "lucide-react";
 import { collections } from "@/lib/collections";
 import { MethodBadge } from "./badges";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { profile } from "@/lib/seed/profile";
 
 export function Sidebar({
   currentUrl,
@@ -15,11 +17,21 @@ export function Sidebar({
   return (
     <aside className="flex h-full w-full flex-col border-r border-border bg-surface">
       <div className="border-b border-border px-4 py-4">
-        <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          Portfolio
-        </div>
-        <div className="mt-1 text-sm font-semibold text-foreground">
-          erraid.api
+        <div className="flex items-center gap-2.5">
+          <Avatar className="h-8 w-8 shrink-0 border border-border-strong">
+            <AvatarImage src={profile.photoUrl} alt={profile.name} />
+            <AvatarFallback className="mono text-[10px]">
+              {profile.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
+            </AvatarFallback>
+          </Avatar>
+          <div className="min-w-0">
+            <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              Portfolio
+            </div>
+            <div className="text-sm font-semibold text-foreground">
+              erraid.api
+            </div>
+          </div>
         </div>
         <div className="mono mt-2 text-[11px] text-muted-foreground">
           v1 · mocked
@@ -43,11 +55,18 @@ export function Sidebar({
                       type="button"
                       onClick={() => onSelect(item.method, item.url, item.locked)}
                       className={cn(
-                        "group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors",
+                        "group relative flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors duration-200",
                         "hover:bg-surface-2",
                         isActive && "bg-surface-3",
                       )}
                     >
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-full bg-primary transition-all duration-200",
+                          isActive ? "opacity-100" : "opacity-0",
+                        )}
+                      />
                       <MethodBadge
                         method={item.method}
                         className="w-10 shrink-0 text-right"

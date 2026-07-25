@@ -1,10 +1,30 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, Github, Linkedin, GraduationCap, AlertTriangle, ShieldAlert, Send, Check, Loader2 } from "lucide-react";
+import {
+  AlertTriangle,
+  ShieldAlert,
+  Send,
+  Check,
+  Loader2,
+  Layout,
+  Server,
+  Database,
+  Smartphone,
+  Bot,
+  Palette,
+  TestTube,
+  Wrench,
+  Crown,
+  GraduationCap,
+  Presentation,
+  BriefcaseBusiness,
+  type LucideIcon,
+} from "lucide-react";
 import type { ApiEnvelope, Project } from "@/lib/types";
 import { StatusBadge } from "./badges";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ProjectPreview } from "./ProjectPreview";
 import { ProjectListPreview } from "./ProjectListPreview";
+import { HomeView } from "./HomeView";
+import { AboutView } from "./AboutView";
 import type { HttpMethod } from "@/hooks/useApiClient";
 import { cn } from "@/lib/utils";
 
@@ -60,6 +80,10 @@ export function ResponsePanel({
           </span>
         )}
 
+        {loading && response ? (
+          <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+        ) : null}
+
         <div className="ml-auto inline-flex overflow-hidden rounded-md border border-border">
           <ModeButton
             active={mode === "preview"}
@@ -78,23 +102,46 @@ export function ResponsePanel({
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {loading && !response ? (
-          <div className="flex h-full items-center justify-center">
-            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-          </div>
+          <ResponseSkeleton />
         ) : !response ? (
           <EmptyState method={method} />
         ) : mode === "pretty" ? (
-          <PrettyJson data={response} />
+          <div
+            key={`pretty-${response.status}-${response._meta?.time ?? 0}`}
+            className="animate-in fade-in duration-200"
+          >
+            <PrettyJson data={response} />
+          </div>
         ) : (
-          <PreviewBody
-            response={response}
-            onOpenProject={onOpenProject}
-            onExpand={onExpand}
-            onSendRaw={onSendRaw}
-          />
+          <div
+            key={`preview-${response.status}-${response._meta?.time ?? 0}`}
+            className="animate-in fade-in slide-in-from-bottom-1 duration-200"
+          >
+            <PreviewBody
+              response={response}
+              onOpenProject={onOpenProject}
+              onExpand={onExpand}
+              onSendRaw={onSendRaw}
+            />
+          </div>
         )}
       </div>
     </section>
+  );
+}
+
+function ResponseSkeleton() {
+  return (
+    <div className="space-y-4 p-5" aria-hidden>
+      <div className="skeleton-shimmer h-20 w-20 rounded-full" />
+      <div className="skeleton-shimmer h-5 w-48 rounded-md" />
+      <div className="skeleton-shimmer h-4 w-72 rounded-md" />
+      <div className="skeleton-shimmer h-32 w-full rounded-xl" />
+      <div className="grid grid-cols-2 gap-3">
+        <div className="skeleton-shimmer h-16 rounded-xl" />
+        <div className="skeleton-shimmer h-16 rounded-xl" />
+      </div>
+    </div>
   );
 }
 
@@ -212,9 +259,25 @@ function PreviewBody({
     );
   }
 
-  // Profile
+  // Home (welcome/landing)
+  if (isRecord(data) && "howToUse" in data && "tagline" in data) {
+    return (
+      <HomeView
+        data={data as {
+          name: string;
+          role: string;
+          photoUrl?: string;
+          status: string;
+          tagline: string;
+          howToUse: string[];
+        }}
+      />
+    );
+  }
+
+  // About (personal narrative)
   if (isRecord(data) && "school" in data && "bio" in data) {
-    return <ProfileCard data={data as ProfileShape} />;
+    return <AboutView data={data as ProfileShape} />;
   }
 
   // Skills
@@ -302,104 +365,27 @@ type ProfileShape = {
   github?: string;
   linkedin?: string;
   bio: string[];
+  journey?: string[];
+  interests?: string[];
 };
 
-function ProfileCard({ data }: { data: ProfileShape }) {
-  return (
-    <div className="p-5">
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <div className="border-b border-border bg-gradient-to-br from-surface-3 to-surface px-6 py-6">
-          <div className="flex items-start gap-4">
-            <Avatar className="h-16 w-16 shrink-0 border border-border-strong sm:h-20 sm:w-20">
-              <AvatarImage src={data.photoUrl} alt={data.name} />
-              <AvatarFallback className="mono text-lg">
-                {data.name
-                  .split(" ")
-                  .map((part) => part[0])
-                  .slice(0, 2)
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <div className="mono text-[11px] uppercase tracking-widest text-primary">
-                {data.seeking}
-              </div>
-              <h2 className="mt-1 text-2xl font-semibold text-foreground">
-                {data.name}
-              </h2>
-              <div className="mt-1 text-sm text-muted-foreground">{data.role}</div>
-            </div>
-          </div>
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            {data.school && (
-              <span className="inline-flex items-center gap-1.5">
-                <GraduationCap className="h-3.5 w-3.5" />
-                {data.school} {data.schoolYears ? `· ${data.schoolYears}` : ""}
-              </span>
-            )}
-            {data.location && (
-              <span className="inline-flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" />
-                {data.location}
-              </span>
-            )}
-          </div>
-        </div>
 
-        <div className="space-y-3 px-6 py-5">
-          {data.bio.map((p, i) => (
-            <p
-              key={i}
-              className="text-[15px] leading-relaxed text-foreground/85"
-            >
-              {p}
-            </p>
-          ))}
-        </div>
+const skillCategoryIcons: Record<string, LucideIcon> = {
+  frontend: Layout,
+  backend: Server,
+  database: Database,
+  mobile: Smartphone,
+  ai: Bot,
+  design: Palette,
+  devops: TestTube,
+};
 
-        <div className="flex flex-wrap gap-2 border-t border-border bg-surface px-6 py-4">
-          {data.email && (
-            <a
-              href={`mailto:${data.email}`}
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs font-medium text-foreground hover:border-ring"
-            >
-              <Mail className="h-3.5 w-3.5 text-primary" />
-              {data.email}
-            </a>
-          )}
-          {data.phone && (
-            <span className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs font-medium text-foreground">
-              <Phone className="h-3.5 w-3.5 text-primary" />
-              {data.phone}
-            </span>
-          )}
-          {data.github && (
-            <a
-              href={data.github}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs font-medium text-foreground hover:border-ring"
-            >
-              <Github className="h-3.5 w-3.5 text-primary" />
-              GitHub ↗
-            </a>
-          )}
-          {data.linkedin && (
-            <a
-              href={data.linkedin}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs font-medium text-foreground hover:border-ring"
-            >
-              <Linkedin className="h-3.5 w-3.5 text-primary" />
-              LinkedIn ↗
-            </a>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+const skillCategoryAccents = [
+  "border-l-[color:var(--primary)]",
+  "border-l-[color:var(--method-post)]",
+  "border-l-[color:var(--status-2xx)]",
+  "border-l-[color:var(--method-get)]",
+];
 
 function SkillsGrid({
   categories,
@@ -408,31 +394,42 @@ function SkillsGrid({
 }) {
   return (
     <div className="grid gap-4 p-5 md:grid-cols-2">
-      {categories.map((cat) => (
-        <div
-          key={cat.id}
-          className="rounded-xl border border-border bg-card p-4"
-        >
-          <div className="mb-3 flex items-baseline justify-between">
-            <h3 className="text-sm font-semibold text-foreground">
-              {cat.label}
-            </h3>
-            <span className="mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              {cat.items.length}
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {cat.items.map((s) => (
-              <span
-                key={s}
-                className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[11.5px] text-foreground/85"
-              >
-                {s}
+      {categories.map((cat, i) => {
+        const Icon = skillCategoryIcons[cat.id] ?? Wrench;
+        const accent = skillCategoryAccents[i % skillCategoryAccents.length];
+        return (
+          <div
+            key={cat.id}
+            className={cn(
+              "animate-in fade-in slide-in-from-bottom-1 rounded-xl border border-border border-l-2 bg-card p-4 duration-500 [animation-fill-mode:backwards]",
+              accent,
+            )}
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Icon className="h-4 w-4 text-primary" />
+                <h3 className="text-sm font-semibold text-foreground">
+                  {cat.label}
+                </h3>
+              </div>
+              <span className="mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                {cat.items.length}
               </span>
-            ))}
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {cat.items.map((s) => (
+                <span
+                  key={s}
+                  className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[11.5px] text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -445,6 +442,14 @@ type ExperienceItem = {
 };
 type Stat = { value: string; label: string };
 
+function roleIcon(role: string): LucideIcon {
+  const r = role.toLowerCase();
+  if (r.includes("president") || r.includes("lead")) return Crown;
+  if (r.includes("mentor")) return GraduationCap;
+  if (r.includes("instructor") || r.includes("workshop")) return Presentation;
+  return BriefcaseBusiness;
+}
+
 function ExperienceView({
   experience,
   impactStats,
@@ -455,10 +460,11 @@ function ExperienceView({
   return (
     <div className="space-y-5 p-5">
       <div className="grid gap-3 sm:grid-cols-4">
-        {impactStats.map((s) => (
+        {impactStats.map((s, i) => (
           <div
             key={s.label}
-            className="rounded-xl border border-border bg-card px-4 py-3"
+            className="animate-in fade-in zoom-in-95 rounded-xl border border-border bg-card px-4 py-3 duration-500 [animation-fill-mode:backwards]"
+            style={{ animationDelay: `${i * 70}ms` }}
           >
             <div className="text-xl font-semibold text-foreground">
               {s.value}
@@ -471,36 +477,65 @@ function ExperienceView({
       </div>
 
       <ol className="relative space-y-3 border-l border-border pl-5">
-        {experience.map((e, i) => (
-          <li key={i} className="relative">
-            <span className="absolute -left-[27px] top-2 h-2 w-2 rounded-full bg-primary ring-4 ring-background" />
-            <div className="rounded-xl border border-border bg-card p-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-sm font-semibold text-foreground">
-                  {e.role}
-                </h3>
-                <span className="mono text-[11px] text-muted-foreground">
-                  {e.period}
-                </span>
+        <span
+          aria-hidden
+          className="absolute -left-px top-0 w-px origin-top animate-in fade-in bg-gradient-to-b from-primary/60 to-transparent duration-700"
+          style={{ height: "100%" }}
+        />
+        {experience.map((e, i) => {
+          const isActive = /present/i.test(e.period);
+          const Icon = roleIcon(e.role);
+          return (
+            <li
+              key={i}
+              className="relative animate-in fade-in slide-in-from-left-2 duration-500 [animation-fill-mode:backwards]"
+              style={{ animationDelay: `${150 + i * 90}ms` }}
+            >
+              <span
+                className={cn(
+                  "absolute -left-[27px] top-2 h-2 w-2 rounded-full ring-4 ring-background",
+                  isActive ? "bg-primary animate-pulse" : "bg-border-strong",
+                )}
+              />
+              <div
+                className={cn(
+                  "rounded-xl border bg-card p-4",
+                  isActive ? "border-primary/40" : "border-border",
+                )}
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                    <Icon className="h-3.5 w-3.5 text-primary" />
+                    {e.role}
+                    {isActive && (
+                      <span className="mono ml-1 rounded-full border border-primary/40 bg-primary/10 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-primary">
+                        active
+                      </span>
+                    )}
+                  </h3>
+                  <span className="mono text-[11px] text-muted-foreground">
+                    {e.period}
+                  </span>
+                </div>
+                <div className="text-xs text-primary">{e.org}</div>
+                <ul className="mt-2 space-y-1.5">
+                  {e.bullets.map((b, k) => (
+                    <li
+                      key={k}
+                      className="relative pl-4 text-sm text-muted-foreground"
+                    >
+                      <span
+                        aria-hidden
+                        className="absolute left-0 top-[0.55rem] h-1.5 w-1.5 rounded-full bg-primary/60"
+                      />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="text-xs text-primary">{e.org}</div>
-              <ul className="mt-2 space-y-1.5">
-                {e.bullets.map((b, k) => (
-                  <li
-                    key={k}
-                    className="relative pl-4 text-sm text-muted-foreground"
-                  >
-                    <span
-                      aria-hidden
-                      className="absolute left-0 top-[0.55rem] h-1.5 w-1.5 rounded-full bg-primary/60"
-                    />
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

@@ -78,7 +78,7 @@ export function RequestBar({
           disabled={loading}
           className={cn(
             "inline-flex items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground",
-            "transition-colors hover:bg-primary/90 disabled:opacity-70",
+            "transition-all hover:bg-primary/90 active:scale-[0.97] disabled:opacity-70",
           )}
         >
           {loading ? (

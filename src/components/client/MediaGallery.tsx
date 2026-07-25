@@ -34,12 +34,13 @@ export function MediaGallery({
           // static domain allowlist would need constant upkeep for no real gain here.
           // eslint-disable-next-line @next/next/no-img-element
           <img
+            key={current.src}
             src={current.src}
             alt={current.alt}
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = "none";
             }}
-            className="h-full w-full object-cover"
+            className="h-full w-full animate-in fade-in object-cover duration-300"
           />
         ) : (
           <video

@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { StatusBadge } from "./badges";
 import type { ApiEnvelope, Project } from "@/lib/types";
 import { ProjectPreview } from "./ProjectPreview";
+
+const EXIT_MS = 180;
 
 export function ExpandedPreviewModal({
   open,
@@ -17,6 +19,29 @@ export function ExpandedPreviewModal({
   onNavigate: (offset: 1 | -1) => void;
   canNavigate: boolean;
 }) {
+  const [rendered, setRendered] = useState(open);
+  const [closing, setClosing] = useState(false);
+
+  useEffect(() => {
+    // Intentional: this effect exists specifically to sync local
+    // mount/closing state to the external `open` prop so an exit animation
+    // can play before actually unmounting -- the documented "adjust state
+    // when a prop changes" exception, not an accidental effect.
+    if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRendered(true);
+      setClosing(false);
+    } else if (rendered) {
+      setClosing(true);
+      const t = setTimeout(() => {
+        setRendered(false);
+        setClosing(false);
+      }, EXIT_MS);
+      return () => clearTimeout(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -28,7 +53,7 @@ export function ExpandedPreviewModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose, onNavigate, canNavigate]);
 
-  if (!open || !response) return null;
+  if (!rendered || !response) return null;
 
   const project = (response.data ?? null) as Project | null;
   const isProject =
@@ -36,11 +61,15 @@ export function ExpandedPreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/70 backdrop-blur-sm"
+      className={`fixed inset-0 z-50 flex items-stretch justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-[180ms] ${
+        closing ? "opacity-0" : "animate-in fade-in opacity-100"
+      }`}
       onClick={onClose}
     >
       <div
-        className="relative m-4 flex w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-border bg-background shadow-2xl"
+        className={`relative m-4 flex w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-border bg-background shadow-2xl transition-all duration-[180ms] ${
+          closing ? "scale-95 opacity-0" : "animate-in zoom-in-95 fade-in"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <header className="flex items-center gap-3 border-b border-border bg-surface px-5 py-3">

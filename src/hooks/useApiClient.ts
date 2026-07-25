@@ -16,7 +16,7 @@ export type ApiClientState = {
 
 export function useApiClient(): ApiClientState {
   const [method, setMethod] = useState<HttpMethod>("GET");
-  const [url, setUrl] = useState("/api/me");
+  const [url, setUrl] = useState("/api/home");
   const [response, setResponse] = useState<ApiEnvelope<unknown> | null>(null);
   const [loading, setLoading] = useState(false);
   const [lastProjectsListIds, setLastProjectsListIds] = useState<number[]>([]);

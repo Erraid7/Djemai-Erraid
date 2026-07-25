@@ -9,9 +9,12 @@ import { ResponsePanel } from "@/components/client/ResponsePanel";
 import { RequestTabBody } from "@/components/client/RequestTabBody";
 import { ExpandedPreviewModal } from "@/components/client/ExpandedPreviewModal";
 import { TestsStrip } from "@/components/client/TestsStrip";
+import { BootSequence } from "@/components/client/BootSequence";
 import { useApiClient, type HttpMethod } from "@/hooks/useApiClient";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { profile } from "@/lib/seed/profile";
 
 export default function Home() {
   const client = useApiClient();
@@ -22,9 +25,9 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  // Fire the initial /api/me request on mount so the panel isn't empty.
+  // Fire the initial /api/home request on mount so the panel isn't empty.
   useEffect(() => {
-    void send("/api/me", "GET");
+    void send("/api/home", "GET");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -86,6 +89,7 @@ export default function Home() {
 
   return (
     <div className="grid h-screen w-full grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr]">
+      <BootSequence />
       <div className="hidden min-h-0 md:block">
         <Sidebar currentUrl={url} currentMethod={method} onSelect={handleSelect} />
       </div>
@@ -107,6 +111,12 @@ export default function Home() {
               <Sidebar currentUrl={url} currentMethod={method} onSelect={handleSelect} />
             </SheetContent>
           </Sheet>
+          <Avatar className="h-6 w-6 shrink-0 border border-border-strong">
+            <AvatarImage src={profile.photoUrl} alt={profile.name} />
+            <AvatarFallback className="mono text-[9px]">
+              {profile.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
+            </AvatarFallback>
+          </Avatar>
           <span className="mono text-sm text-foreground">erraid.api</span>
         </div>
 

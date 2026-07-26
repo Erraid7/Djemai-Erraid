@@ -6,6 +6,7 @@ type AboutData = {
   role: string;
   photoUrl?: string;
   school: string;
+  speciality?: string;
   schoolYears?: string;
   location?: string;
   seeking?: string;
@@ -39,7 +40,9 @@ export function AboutView({ data }: { data: AboutData }) {
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <GraduationCap className="h-3.5 w-3.5" />
-            {data.school} · {data.schoolYears}
+            {data.school}
+            {data.speciality ? ` · ${data.speciality}` : ""}
+            {data.schoolYears ? ` · ${data.schoolYears}` : ""}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <MapPin className="h-3.5 w-3.5" />

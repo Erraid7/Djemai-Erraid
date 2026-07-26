@@ -14,6 +14,7 @@ import {
   TestTube,
   Wrench,
   Crown,
+  Code2,
   GraduationCap,
   Presentation,
   BriefcaseBusiness,
@@ -269,6 +270,7 @@ function PreviewBody({
           photoUrl?: string;
           status: string;
           tagline: string;
+          stats?: { value: string; label: string }[];
           howToUse: string[];
         }}
       />
@@ -295,14 +297,13 @@ function PreviewBody({
     );
   }
 
-  // Experience envelope shape: { experience, impactStats }
-  if (isRecord(data) && "experience" in data && "impactStats" in data) {
+  // Experience envelope shape: { experience }
+  if (isRecord(data) && "experience" in data && Array.isArray((data as Record<string, unknown>).experience)) {
     return (
       <ExperienceView
         experience={
           (data as { experience: ExperienceItem[] }).experience
         }
-        impactStats={(data as { impactStats: Stat[] }).impactStats}
       />
     );
   }
@@ -357,6 +358,7 @@ type ProfileShape = {
   role: string;
   photoUrl?: string;
   school: string;
+  speciality?: string;
   schoolYears?: string;
   location?: string;
   seeking?: string;
@@ -440,41 +442,19 @@ type ExperienceItem = {
   period: string;
   bullets: string[];
 };
-type Stat = { value: string; label: string };
 
 function roleIcon(role: string): LucideIcon {
   const r = role.toLowerCase();
+  if (r.includes("freelance") || r.includes("developer")) return Code2;
   if (r.includes("president") || r.includes("lead")) return Crown;
   if (r.includes("mentor")) return GraduationCap;
   if (r.includes("instructor") || r.includes("workshop")) return Presentation;
   return BriefcaseBusiness;
 }
 
-function ExperienceView({
-  experience,
-  impactStats,
-}: {
-  experience: ExperienceItem[];
-  impactStats: Stat[];
-}) {
+function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
   return (
     <div className="space-y-5 p-5">
-      <div className="grid gap-3 sm:grid-cols-4">
-        {impactStats.map((s, i) => (
-          <div
-            key={s.label}
-            className="animate-in fade-in zoom-in-95 rounded-xl border border-border bg-card px-4 py-3 duration-500 [animation-fill-mode:backwards]"
-            style={{ animationDelay: `${i * 70}ms` }}
-          >
-            <div className="text-xl font-semibold text-foreground">
-              {s.value}
-            </div>
-            <div className="mt-0.5 text-[11px] uppercase tracking-wider text-muted-foreground">
-              {s.label}
-            </div>
-          </div>
-        ))}
-      </div>
 
       <ol className="relative space-y-3 border-l border-border pl-5">
         <span

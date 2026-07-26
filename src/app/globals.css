@@ -159,3 +159,18 @@
   background-size: 400% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }
+
+/* Subtle ambient drift -- used sparingly (Home view only) so it reads as
+   atmosphere, not a distraction. Kept slow and low-opacity on purpose. */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(3%, -4%) scale(1.05); }
+}
+.animate-drift {
+  animation: drift 14s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift {
+    animation: none;
+  }
+}

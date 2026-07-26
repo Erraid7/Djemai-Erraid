@@ -10,6 +10,15 @@ export const home = {
   status: `${profile.role} · ${profile.seeking}`,
   tagline:
     "This portfolio works like a real API client -- pick a request from the sidebar, hit Send, and the response renders as a real page instead of raw JSON.",
+  // Dev/technical stats -- kept honest and derivable from the actual seed
+  // data rather than vanity numbers. Update alongside projects.ts/skills.ts
+  // if those change.
+  stats: [
+    { value: "7", label: "projects shipped" },
+    { value: "2", label: "live deployments" },
+    { value: "3", label: "platforms — web, mobile, desktop" },
+    { value: "30+", label: "technologies across the stack" },
+  ],
   howToUse: [
     "Pick a request from the sidebar on the left (or the menu on mobile).",
     "Hit Send to see the response render below.",

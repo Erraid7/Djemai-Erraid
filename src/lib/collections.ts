@@ -30,6 +30,7 @@ export const collections: Collection[] = [
       { method: "GET", url: "/api/projects/3", icon: FolderGit2 },
       { method: "GET", url: "/api/projects/4", icon: FolderGit2 },
       { method: "GET", url: "/api/projects/5", icon: FolderGit2 },
+      { method: "GET", url: "/api/projects/6", icon: FolderGit2 },
     ],
   },
   { label: "Skills", items: [{ method: "GET", url: "/api/skills", icon: Wrench }] },

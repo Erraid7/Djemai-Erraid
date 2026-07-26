@@ -113,9 +113,9 @@ export default function Home() {
           </Sheet>
           <Avatar className="h-6 w-6 shrink-0 border border-border-strong">
             <AvatarImage src={profile.photoUrl} alt={profile.name} />
-            <AvatarFallback className="mono text-[9px]">
+            {/* <AvatarFallback className="mono text-[9px]">
               {profile.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
-            </AvatarFallback>
+            </AvatarFallback> */}
           </Avatar>
           <span className="mono text-sm text-foreground">erraid.api</span>
         </div>

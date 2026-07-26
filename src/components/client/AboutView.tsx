@@ -21,7 +21,7 @@ type AboutData = {
 export function AboutView({ data }: { data: AboutData }) {
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="border-b border-border bg-gradient-to-br from-surface-3 to-surface px-6 py-6">
+      <div className="border-b border-border bg-linear-to-br from-surface-3 to-surface px-6 py-6">
         <div className="flex items-start gap-4">
           <Avatar className="h-16 w-16 shrink-0 border border-border-strong sm:h-20 sm:w-20">
             <AvatarImage src={data.photoUrl} alt={data.name} />

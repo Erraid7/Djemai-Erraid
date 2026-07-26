@@ -19,7 +19,7 @@ export function HomeView({
   };
 }) {
   return (
-    <div className="relative flex min-h-[420px] flex-col items-center justify-center overflow-hidden px-6 py-12 text-center">
+    <div className="relative flex min-h-105 flex-col items-center justify-center overflow-hidden px-6 py-12 text-center">
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="animate-drift absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div
@@ -40,14 +40,14 @@ export function HomeView({
           </AvatarFallback>
         </Avatar>
 
-        <h1 className="mt-5 animate-in fade-in slide-in-from-bottom-2 text-2xl font-semibold tracking-tight text-foreground duration-500 [animation-delay:100ms] [animation-fill-mode:backwards] sm:text-3xl">
+        <h1 className="mt-5 animate-in fade-in slide-in-from-bottom-2 text-2xl font-semibold tracking-tight text-foreground duration-500 [animation-delay:100ms] fill-mode-[backwards] sm:text-3xl">
           {data.name}
         </h1>
-        <p className="mt-1 animate-in fade-in slide-in-from-bottom-2 text-sm text-muted-foreground duration-500 [animation-delay:150ms] [animation-fill-mode:backwards]">
+        <p className="mt-1 animate-in fade-in slide-in-from-bottom-2 text-sm text-muted-foreground duration-500 [animation-delay:150ms] fill-mode-[backwards]">
           {data.status}
         </p>
 
-        <p className="mt-6 max-w-md animate-in fade-in slide-in-from-bottom-2 text-[15px] leading-relaxed text-foreground/85 duration-500 [animation-delay:220ms] [animation-fill-mode:backwards]">
+        <p className="mt-6 max-w-md animate-in fade-in slide-in-from-bottom-2 text-[15px] leading-relaxed text-foreground/85 duration-500 [animation-delay:220ms] fill-mode-[backwards]">
           {data.tagline}
         </p>
 
@@ -56,7 +56,7 @@ export function HomeView({
             {data.stats.map((s, i) => (
               <div
                 key={s.label}
-                className="animate-in fade-in zoom-in-95 rounded-xl border border-border bg-card px-3 py-3 duration-500 [animation-fill-mode:backwards]"
+                className="animate-in fade-in zoom-in-95 rounded-xl border border-border bg-card px-3 py-3 duration-500 fill-mode-[backwards]"
                 style={{ animationDelay: `${260 + i * 70}ms` }}
               >
                 <div className="text-lg font-semibold text-foreground">{s.value}</div>
@@ -74,7 +74,7 @@ export function HomeView({
             return (
               <div
                 key={i}
-                className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-ring animate-in fade-in slide-in-from-bottom-2 [animation-fill-mode:backwards]"
+                className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-ring animate-in fade-in slide-in-from-bottom-2 fill-mode-[backwards]"
                 style={{ animationDelay: `${540 + i * 90}ms` }}
               >
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">

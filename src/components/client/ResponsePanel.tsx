@@ -190,7 +190,7 @@ function EmptyState({ method }: { method: HttpMethod }) {
 
 function PrettyJson({ data }: { data: unknown }) {
   return (
-    <pre className="mono whitespace-pre-wrap break-words p-4 text-[12.5px] leading-relaxed text-foreground/85">
+    <pre className="mono whitespace-pre-wrap wrap-break-word p-4 text-[12.5px] leading-relaxed text-foreground/85">
       {JSON.stringify(data, null, 2)}
     </pre>
   );
@@ -403,7 +403,7 @@ function SkillsGrid({
           <div
             key={cat.id}
             className={cn(
-              "animate-in fade-in slide-in-from-bottom-1 rounded-xl border border-border border-l-2 bg-card p-4 duration-500 [animation-fill-mode:backwards]",
+              "animate-in fade-in slide-in-from-bottom-1 rounded-xl border border-border border-l-2 bg-card p-4 duration-500 fill-mode-[backwards]",
               accent,
             )}
             style={{ animationDelay: `${i * 60}ms` }}
@@ -459,7 +459,7 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
       <ol className="relative space-y-3 border-l border-border pl-5">
         <span
           aria-hidden
-          className="absolute -left-px top-0 w-px origin-top animate-in fade-in bg-gradient-to-b from-primary/60 to-transparent duration-700"
+          className="absolute -left-px top-0 w-px origin-top animate-in fade-in bg-linear-to-b from-primary/60 to-transparent duration-700"
           style={{ height: "100%" }}
         />
         {experience.map((e, i) => {
@@ -468,12 +468,12 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
           return (
             <li
               key={i}
-              className="relative animate-in fade-in slide-in-from-left-2 duration-500 [animation-fill-mode:backwards]"
+              className="relative animate-in fade-in slide-in-from-left-2 duration-500 fill-mode-[backwards]"
               style={{ animationDelay: `${150 + i * 90}ms` }}
             >
               <span
                 className={cn(
-                  "absolute -left-[27px] top-2 h-2 w-2 rounded-full ring-4 ring-background",
+                  "absolute -left-6.75 top-2 h-2 w-2 rounded-full ring-4 ring-background",
                   isActive ? "bg-primary animate-pulse" : "bg-border-strong",
                 )}
               />

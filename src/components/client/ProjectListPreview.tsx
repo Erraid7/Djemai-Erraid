@@ -32,7 +32,7 @@ export function ProjectListPreview({
           return (
             <li
               key={p.id}
-              className="animate-in fade-in slide-in-from-bottom-1 duration-500 [animation-fill-mode:backwards]"
+              className="animate-in fade-in slide-in-from-bottom-1 duration-500 fill-mode-[backwards]"
               style={{ animationDelay: `${i * 55}ms` }}
             >
               <button

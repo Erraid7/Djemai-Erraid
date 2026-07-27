@@ -14,11 +14,18 @@ export const projects: Project[] = [
       "Validated cross-layer reliability across 15+ frontend pages and the REST API with function and integration tests, then deployed to Vercel and Render.",
     ],
     stack: ["Next.js", "TypeScript", "Express.js", "Prisma", "PostgreSQL", "JWT"],
-    media: [],
+    media: [
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167285/Capture_d_%C3%A9cran_2026-07-27_163903_hyeabf.png", alt: "ESI Flow Responsive WebApp" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167265/Capture_d_%C3%A9cran_2026-07-27_164013_wubf58.png", alt: "ESI Flow login" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167254/Capture_d_%C3%A9cran_2026-07-27_163945_i18lxg.png", alt: "ESI Flow home" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167243/Capture_d_%C3%A9cran_2026-07-27_164124_wd7ki9.png", alt: "ESI Flow admin panel" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167240/Capture_d_%C3%A9cran_2026-07-27_164215_gevbgq.png", alt: "ESI Flow tasks management" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167241/Capture_d_%C3%A9cran_2026-07-27_164140_yprwu1.png", alt: "ESI Flow requests management" },
+    ],
     links: {
       live: { available: true, url: "https://esi-flow.vercel.app" },
       github: { available: true, url: "https://github.com/Erraid7" },
-      demoVideo: { available: false, reason: "No walkthrough video recorded yet — the live site above covers this." },
+      demoVideo: { available: true, url:"https://drive.google.com/file/u/0/d/1tgZCjCQEHpD4X_ky7EZoUFjWV6vSUqin/view" },
     },
     docsMarkdown:
       "## ESI Flow\n\nESI Flow is a multi-role SaaS platform built to give ESI's students, technicians, and admins a single system for filing, tracking, and resolving requests — the kind of internal tool a school actually needs but rarely has.\n\nAs team lead on a 5-person team, I owned the system design and database architecture from the start: a Prisma/PostgreSQL schema supporting 3 distinct user roles, each with different permissions enforced through JWT-secured role-based access control. I wrote roughly 80% of the Express/TypeScript backend myself, while coordinating the rest of the team through Agile sprints — planning, reviewing, and keeping the whole thing shippable rather than just architecturally correct.\n\nThe frontend spans 15+ pages across the three roles, backed by a REST API validated with function and integration tests before deployment. It's live today on Vercel (frontend) and Render (backend), not a class demo that only ran once.",
@@ -36,7 +43,11 @@ export const projects: Project[] = [
       "Implemented all backend logic in TypeScript/Express, from data model to deployed service.",
     ],
     stack: ["Next.js", "TypeScript", "Flutter", "Node.js", "Express", "Prisma", "PostgreSQL", "JWT"],
-    media: [],
+    media: [
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167264/Capture_d_%C3%A9cran_2026-07-27_164351_izzuyq.png", alt: "Khatma home" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167248/Capture_d_%C3%A9cran_2026-07-27_164431_d0ymgv.png", alt: "Khatma student dashboard" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785167228/Capture_d_%C3%A9cran_2026-07-27_164447_gnfif0.png", alt: "Khatma hifz map" },
+    ],
     links: {
       live: { available: false, reason: "Not deployed publicly yet — currently used within a closed pilot group." },
       github: { available: true, url: "https://github.com/Erraid7" },

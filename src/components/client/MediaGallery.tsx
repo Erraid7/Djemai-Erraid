@@ -14,7 +14,7 @@ export function MediaGallery({
 
   if (media.length === 0) {
     return (
-      <div className="flex min-h-[220px] flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface-2 px-6 py-10 text-center">
+      <div className="flex min-h-55 flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface-2 px-6 py-10 text-center">
         <ImageOff className="mb-3 h-6 w-6 text-muted-foreground" />
         <p className="max-w-sm text-sm text-muted-foreground">
           {fallbackReason ??
@@ -27,7 +27,7 @@ export function MediaGallery({
   const current = media[i]!;
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-black/40">
-      <div className="relative aspect-[16/9] w-full bg-black">
+      <div className="relative aspect-auto w-full bg-black">
         {current.type === "image" ? (
           // Plain <img> is intentional: media URLs will be arbitrary Cloudinary
           // URLs decided at content-edit time, not build time, so next/image's
@@ -54,7 +54,7 @@ export function MediaGallery({
         )}
         {/* Placeholder pattern behind if image fails */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 bg-[repeating-linear-gradient(45deg,theme(colors.white/5)_0,theme(colors.white/5)_1px,transparent_1px,transparent_10px)]"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[repeating-linear-gradient(45deg,--theme(--color-white/5)_0,--theme(--color-white/5)_1px,transparent_1px,transparent_10px)]"
           aria-hidden
         />
         {current.type === "video" ? (

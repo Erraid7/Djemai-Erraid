@@ -96,7 +96,16 @@ export const projects: Project[] = [
       "Wrote unit and integration tests across the user, pass, and validation subsystems.",
     ],
     stack: ["Java", "JavaFX"],
-    media: [],
+    media: [
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191802/Capture_d_%C3%A9cran_2026-07-27_233315_xhy89x.png", alt: "ESI Run dashboard" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233326_i37xb8.png", alt: "ESI Run user management" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233406_bq9fmm.png", alt: "ESI Run new user" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233419_qc4mj9.png", alt: "ESI Run transport passes" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233429_b7ijxx.png", alt: "ESI Run pass details" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191795/Capture_d_%C3%A9cran_2026-07-27_233507_mqzkwo.png", alt: "ESI Run new pass" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233540_jrnxqa.png", alt: "ESI Run complaints" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233559_yktook.png", alt: "ESI Run new complaint" }
+    ],
     links: {
       live: { available: false, reason: "Desktop application, there's no hosted version." },
       github: { available: true, url: "https://github.com/Erraid7" },

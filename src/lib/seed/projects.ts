@@ -126,10 +126,16 @@ export const projects: Project[] = [
       "Implemented an infinite-scroll sponsor slider with direction-reactive animation.",
     ],
     stack: ["Next.js", "TypeScript", "Tailwind CSS"],
-    media: [],
+    media: [
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785193429/Capture_d_%C3%A9cran_2026-07-27_235001_avdi6y.png", alt: "CSE Club Website" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785193459/Capture_d_%C3%A9cran_2026-07-27_235217_pweay1.png", alt: "CSE Club About" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785193436/Capture_d_%C3%A9cran_2026-07-27_235050_jkazwo.png", alt: "CSE Club TrustedBy" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785193452/Capture_d_%C3%A9cran_2026-07-27_235134_keuusl.png", alt: "CSE Club Events" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785193469/Capture_d_%C3%A9cran_2026-07-27_235418_wcdvbp.png", alt: "CSE Club Community" },
+    ],
     links: {
-      live: { available: false, reason: "Public URL not yet finalized — replace with the real link when live." },
-      github: { available: true, url: "https://github.com/Erraid7" },
+      live: { available: true, url: "https://cse.club/" },
+      github: { available: false, reason: "Confidential club project." },
       demoVideo: { available: false, reason: "No walkthrough video recorded yet." },
     },
     docsMarkdown:

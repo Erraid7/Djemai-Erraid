@@ -24,7 +24,7 @@ export const projects: Project[] = [
     ],
     links: {
       live: { available: true, url: "https://esi-flow.vercel.app" },
-      github: { available: true, url: "https://github.com/Erraid7" },
+      github: { available: true, url: "https://github.com/Erraid7/esi_flow_front" },
       demoVideo: { available: true, url:"https://drive.google.com/file/u/0/d/1tgZCjCQEHpD4X_ky7EZoUFjWV6vSUqin/view" },
     },
     docsMarkdown:
@@ -50,7 +50,7 @@ export const projects: Project[] = [
     ],
     links: {
       live: { available: false, reason: "Not deployed publicly yet — currently used within a closed pilot group." },
-      github: { available: true, url: "https://github.com/Erraid7" },
+      github: { available: true, url: "https://github.com/Erraid7/khatma-frontend" },
       demoVideo: { available: false, reason: "No demo recording yet — check back soon." },
     },
     docsMarkdown:
@@ -78,7 +78,7 @@ export const projects: Project[] = [
     ],
     links: {
       live: { available: true, url: "https://pharmacy-product-platform.vercel.app" },
-      github: { available: true, url: "https://github.com/Erraid7" },
+      github: { available: true, url: "https://github.com/Erraid7/pharmacy-product-platform" },
       demoVideo: { available: false, reason: "No walkthrough video — the live site above covers this." },
     },
     docsMarkdown:
@@ -86,33 +86,27 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    slug: "esi-run",
-    name: "ESI Run",
-    role: "Developer",
+    slug: "refactoring-swarm",
+    name: "Refactoring Swarm",
+    role: "Designer & Builder",
     pinned: true,
-    summary: "A desktop public-transportation management system: accounts, pass management, complaint handling, and validation workflows.",
+    summary: "An autonomous 4-agent pipeline — Auditor, Fixer, Tester, Documenter — that reviews, refactors, tests, and documents Python code.",
     bullets: [
-      "Implemented full business logic in Java/JavaFX with CSV-based persistence.",
-      "Wrote unit and integration tests across the user, pass, and validation subsystems.",
+      "Eliminated manual code-review overhead by chaining agents that analyze code quality, propose refactors, generate tests, and update documentation.",
+      "Applied swarm intelligence principles to coordinate LLM-powered agents with clearly separated responsibilities.",
+      "Structured inter-agent communication so each agent's output becomes verified input for the next.",
     ],
-    stack: ["Java", "JavaFX"],
+    stack: ["Python", "LLM APIs", "Multi-agent systems"],
     media: [
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191802/Capture_d_%C3%A9cran_2026-07-27_233315_xhy89x.png", alt: "ESI Run dashboard" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233326_i37xb8.png", alt: "ESI Run user management" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233406_bq9fmm.png", alt: "ESI Run new user" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233419_qc4mj9.png", alt: "ESI Run transport passes" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233429_b7ijxx.png", alt: "ESI Run pass details" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191795/Capture_d_%C3%A9cran_2026-07-27_233507_mqzkwo.png", alt: "ESI Run new pass" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233540_jrnxqa.png", alt: "ESI Run complaints" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233559_yktook.png", alt: "ESI Run new complaint" }
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785268059/ChatGPT_Image_Jul_28_2026_08_37_35_PM_dlhrls.png", alt: "Refactoring Swarm pipeline"}
     ],
     links: {
-      live: { available: false, reason: "Desktop application, there's no hosted version." },
-      github: { available: true, url: "https://github.com/Erraid7" },
+      live: { available: false, reason: "This is a CLI/pipeline tool, not a hosted app — no live URL applies." },
+      github: { available: true, url: "https://github.com/Erraid7/Refactoring-Swarm-Equipe-24" },
       demoVideo: { available: false, reason: "Recording planned — check back soon." },
     },
     docsMarkdown:
-      "## ESI Run\n\nESI Run is a desktop management system for a public-transportation network: user accounts, transit pass issuance and renewal, complaint handling, and pass validation, all in one Java/JavaFX application.\n\nI implemented the full business logic across these subsystems with CSV-based persistence, then backed it with unit and integration tests across the user, pass, and validation flows — the part of the project that mattered most, since a transit system with silent validation bugs is worse than no system at all.\n\nIt's a good example of solid engineering discipline outside the web stack I use most: same care about correctness and testing, applied to a desktop Java codebase instead of a REST API.",
+      "## Refactoring Swarm\n\nRefactoring Swarm is an autonomous pipeline of 4 LLM-powered agents — Auditor, Fixer, Tester, Documenter — that walks through a Python codebase the way a careful senior engineer would, without a human in the loop.\n\nThe Auditor analyzes code quality and flags issues; the Fixer proposes and applies refactors; the Tester generates tests against the refactored code; the Documenter updates documentation to match. Each agent has a narrow, clearly separated responsibility, and each one's output becomes verified input for the next — so mistakes don't silently compound down the chain.\n\nThis was my first real exploration of applying swarm-intelligence principles (coordination through role separation, not a single do-everything prompt) to a genuine engineering workflow, rather than a toy demo. It's the project I'd point to if asked how far multi-agent systems can actually go in day-to-day software work.",
   },
   {
     id: 5,
@@ -143,26 +137,35 @@ export const projects: Project[] = [
   },
   {
     id: 6,
-    slug: "refactoring-swarm",
-    name: "Refactoring Swarm",
-    role: "Designer & Builder",
+    slug: "esi-run",
+    name: "ESI Run",
+    role: "Developer",
     pinned: true,
-    summary: "An autonomous 4-agent pipeline — Auditor, Fixer, Tester, Documenter — that reviews, refactors, tests, and documents Python code.",
+    summary: "A desktop public-transportation management system: accounts, pass management, complaint handling, and validation workflows.",
     bullets: [
-      "Eliminated manual code-review overhead by chaining agents that analyze code quality, propose refactors, generate tests, and update documentation.",
-      "Applied swarm intelligence principles to coordinate LLM-powered agents with clearly separated responsibilities.",
-      "Structured inter-agent communication so each agent's output becomes verified input for the next.",
+      "Implemented full business logic in Java/JavaFX with CSV-based persistence.",
+      "Wrote unit and integration tests across the user, pass, and validation subsystems.",
     ],
-    stack: ["Python", "LLM APIs", "Multi-agent systems"],
-    media: [],
+    stack: ["Java", "JavaFX"],
+    media: [
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191802/Capture_d_%C3%A9cran_2026-07-27_233315_xhy89x.png", alt: "ESI Run dashboard" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233326_i37xb8.png", alt: "ESI Run user management" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233406_bq9fmm.png", alt: "ESI Run new user" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233419_qc4mj9.png", alt: "ESI Run transport passes" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233429_b7ijxx.png", alt: "ESI Run pass details" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191795/Capture_d_%C3%A9cran_2026-07-27_233507_mqzkwo.png", alt: "ESI Run new pass" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233540_jrnxqa.png", alt: "ESI Run complaints" },
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233559_yktook.png", alt: "ESI Run new complaint" }
+    ],
     links: {
-      live: { available: false, reason: "This is a CLI/pipeline tool, not a hosted app — no live URL applies." },
-      github: { available: true, url: "https://github.com/Erraid7" },
+      live: { available: false, reason: "Desktop application, there's no hosted version." },
+      github: { available: true, url: "https://github.com/Erraid7/javaFX_project" },
       demoVideo: { available: false, reason: "Recording planned — check back soon." },
     },
     docsMarkdown:
-      "## Refactoring Swarm\n\nRefactoring Swarm is an autonomous pipeline of 4 LLM-powered agents — Auditor, Fixer, Tester, Documenter — that walks through a Python codebase the way a careful senior engineer would, without a human in the loop.\n\nThe Auditor analyzes code quality and flags issues; the Fixer proposes and applies refactors; the Tester generates tests against the refactored code; the Documenter updates documentation to match. Each agent has a narrow, clearly separated responsibility, and each one's output becomes verified input for the next — so mistakes don't silently compound down the chain.\n\nThis was my first real exploration of applying swarm-intelligence principles (coordination through role separation, not a single do-everything prompt) to a genuine engineering workflow, rather than a toy demo. It's the project I'd point to if asked how far multi-agent systems can actually go in day-to-day software work.",
+      "## ESI Run\n\nESI Run is a desktop management system for a public-transportation network: user accounts, transit pass issuance and renewal, complaint handling, and pass validation, all in one Java/JavaFX application.\n\nI implemented the full business logic across these subsystems with CSV-based persistence, then backed it with unit and integration tests across the user, pass, and validation flows — the part of the project that mattered most, since a transit system with silent validation bugs is worse than no system at all.\n\nIt's a good example of solid engineering discipline outside the web stack I use most: same care about correctness and testing, applied to a desktop Java codebase instead of a REST API.",
   },
+  
 
   // Hidden -- confidential client project, intentionally not pinned in the
   // sidebar. Reachable only by editing the URL bar to /api/projects/7.

@@ -10,6 +10,7 @@ export async function GET(
   const { id: idParam } = await params;
   const id = Number(idParam);
 
+  try {
   const res = await fetch(`${DJANGO_API_URL}/projects/${id}/`, {
     method: "GET",
     headers: {
@@ -31,8 +32,28 @@ export async function GET(
   }
 
   return NextResponse.json({
-    status: 200,
-    statusText: "OK",
+    status: res.status,
+    statusText: res.statusText,
     data: project,
   });
+  } catch (error) {
+    const project = projects.find((p) => p.id === id);
+
+    if (!project) {
+      return NextResponse.json(
+        {
+          status: 404,
+          statusText: "Not Found",
+          data: { error: `No project with id ${id}.` },
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      status: 200,
+      statusText: "Ok",
+      data: project,
+    });
+  }
 }

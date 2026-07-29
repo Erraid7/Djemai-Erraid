@@ -4,6 +4,8 @@ import { projects } from "@/lib/seed/projects";
 const DJANGO_API_URL = process.env.DJANGO_API_URL ?? "http://localhost:8000/api";
 
 export async function GET() {
+
+  try {
   const res = await fetch(`${DJANGO_API_URL}/projects/`, {
     method: "GET",
     headers: {
@@ -16,4 +18,11 @@ export async function GET() {
     statusText: res.statusText,
     data: body.data,
   });
+  } catch (error) {
+    return NextResponse.json({
+      status: 200,
+      statusText: "Ok",
+      data: projects,
+    });
+  }
 }

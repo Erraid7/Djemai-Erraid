@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+const DJANGO_API_URL = process.env.DJANGO_API_URL ?? "http://localhost:8000/api";
 type ContactBody = { name?: string; email?: string; message?: string };
 
 export async function POST(request: Request) {
@@ -22,15 +23,40 @@ export async function POST(request: Request) {
     );
   }
 
-  // MOCK: replace with real email send / DB insert in the backend phase.
+  
   console.log("[contact] queued", { name, email });
 
-  return NextResponse.json(
-    {
-      status: 202,
-      statusText: "Accepted",
-      data: { queued: true, receivedAt: new Date().toISOString() },
+  try {
+  const res = await fetch(`${DJANGO_API_URL}/contact/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-    { status: 202 }
-  );
+    body: JSON.stringify({ name, email, message }),
+  });
+
+  if (!res.ok) {
+    const body = await res.json();
+    return NextResponse.json(
+      {
+        status: res.status,
+        statusText: res.statusText,
+        data: body,
+      },
+      { status: res.status }
+    );
+  }
+
+  return NextResponse.json({
+    status: res.status,
+    statusText: res.statusText,
+    data: { message: "Message sent successfully." },
+  });
+  } catch (error) {
+    return NextResponse.json({
+      status: 500,
+      statusText: "Internal Server Error",
+      data: { error: "Failed to send message." },
+    });
+  }
 }

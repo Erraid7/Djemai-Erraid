@@ -216,22 +216,27 @@ function PreviewBody({
     return <ErrorCard status={status} data={data} />;
   }
 
+  const isSuccess =
+  status === 202 &&
+  isRecord(data) &&
+  typeof data.message === "string";
+
+  console.log("isSuccess:", isSuccess, "data:", data);
+
   // Contact accepted
-  if (
-    isRecord(data) &&
-    "queued" in data &&
-    (data as { queued?: boolean }).queued === true
-  ) {
+  if (isSuccess) {
     return (
       <div className="flex h-full items-center justify-center p-10">
-        <div className="rounded-xl border border-primary/30 bg-primary/10 px-6 py-6 text-center">
-          <Check className="mx-auto mb-2 h-6 w-6 text-primary" />
-          <h3 className="text-base font-semibold text-foreground">
-            Message queued
-          </h3>
-          <p className="mt-1 max-w-xs text-base text-muted-foreground">
-            Server accepted your message. In the real backend this would send an
-            email and store the row.
+        <div className="max-w-md rounded-xl border border-green-500/30 bg-green-500/10 p-8 text-center">
+          <Check className="mx-auto mb-4 h-10 w-10 text-green-500" />
+
+          <h2 className="text-xl font-semibold text-foreground">
+            Message Sent Successfully
+          </h2>
+
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            Thank you for reaching out! Your message has been received and I'll
+            get back to you as soon as possible.
           </p>
         </div>
       </div>

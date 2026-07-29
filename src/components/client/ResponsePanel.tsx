@@ -221,8 +221,6 @@ function PreviewBody({
   isRecord(data) &&
   typeof data.message === "string";
 
-  console.log("isSuccess:", isSuccess, "data:", data);
-
   // Contact accepted
   if (isSuccess) {
     return (

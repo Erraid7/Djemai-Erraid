@@ -41,7 +41,7 @@ export function RequestBar({
           value={method}
           onChange={(e) => onMethodChange(e.target.value as "GET" | "POST")}
           className={cn(
-            "mono cursor-pointer appearance-none bg-transparent pr-2 text-xs font-bold uppercase tracking-wider outline-none",
+            "mono cursor-pointer appearance-none bg-transparent pr-2 text-sm font-bold uppercase tracking-wider outline-none",
             methodColor,
           )}
         >
@@ -69,7 +69,7 @@ export function RequestBar({
           spellCheck={false}
           placeholder="/api/..."
           className={cn(
-            "mono flex-1 rounded-md border border-border bg-input px-3 text-[13px] text-foreground outline-none",
+            "mono flex-1 rounded-md border border-border bg-input px-3 text-[15px] text-foreground outline-none",
             "placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/30",
           )}
         />
@@ -77,7 +77,7 @@ export function RequestBar({
           type="submit"
           disabled={loading}
           className={cn(
-            "inline-flex items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground",
+            "inline-flex items-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground",
             "transition-all hover:bg-primary/90 active:scale-[0.97] disabled:opacity-70",
           )}
         >

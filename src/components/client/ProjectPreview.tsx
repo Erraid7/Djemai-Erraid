@@ -33,16 +33,16 @@ export function ProjectPreview({
               {project.name}
             </h2>
             {project.pinned ? (
-              <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary">
+              <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[12px] font-medium uppercase tracking-wider text-primary">
                 <Pin className="h-3 w-3" /> pinned
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 rounded-full border border-border-strong bg-surface-3 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              <span className="inline-flex items-center gap-1 rounded-full border border-border-strong bg-surface-3 px-2 py-0.5 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">
                 <EyeOff className="h-3 w-3" /> hidden project
               </span>
             )}
           </div>
-          <div className="mt-0.5 text-sm text-muted-foreground">
+          <div className="mt-0.5 text-base text-muted-foreground">
             {project.role}
           </div>
         </div>
@@ -50,7 +50,7 @@ export function ProjectPreview({
           <button
             type="button"
             onClick={onExpand}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
           >
             <Maximize2 className="h-3.5 w-3.5" />
             Expand
@@ -69,7 +69,7 @@ export function ProjectPreview({
 
         {/* Right column */}
         <div className={cn("space-y-5", !compact && "lg:col-span-2")}>
-          <p className="text-[15px] leading-relaxed text-foreground/90">
+          <p className="text-[16px] leading-relaxed text-foreground/90">
             {project.summary}
           </p>
 
@@ -77,7 +77,7 @@ export function ProjectPreview({
             {project.bullets.map((b, i) => (
               <li
                 key={i}
-                className="relative pl-4 text-sm leading-relaxed text-muted-foreground"
+                className="relative pl-4 text-base leading-relaxed text-muted-foreground"
               >
                 <span
                   aria-hidden
@@ -92,7 +92,7 @@ export function ProjectPreview({
             {project.stack.map((s) => (
               <span
                 key={s}
-                className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[11px] text-foreground/85"
+                className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[13px] text-foreground/85"
               >
                 {s}
               </span>

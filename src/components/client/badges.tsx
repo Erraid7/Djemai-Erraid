@@ -14,7 +14,7 @@ export function MethodBadge({
   return (
     <span
       className={cn(
-        "mono text-[10px] font-bold tracking-wider uppercase",
+        "mono text-[12px] font-bold tracking-wider uppercase",
         color,
         className,
       )}
@@ -42,7 +42,7 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "mono inline-flex items-center gap-2 rounded-md border px-2 py-0.5 text-[11px] font-medium",
+        "mono inline-flex items-center gap-2 rounded-md border px-2 py-0.5 text-[13px] font-medium",
         tone,
       )}
     >

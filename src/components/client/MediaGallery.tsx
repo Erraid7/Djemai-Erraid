@@ -14,9 +14,9 @@ export function MediaGallery({
 
   if (media.length === 0) {
     return (
-      <div className="flex min-h-55 flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface-2 px-6 py-10 text-center">
+      <div className="flex min-h-[220px] flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface-2 px-6 py-10 text-center">
         <ImageOff className="mb-3 h-6 w-6 text-muted-foreground" />
-        <p className="max-w-sm text-sm text-muted-foreground">
+        <p className="max-w-sm text-base text-muted-foreground">
           {fallbackReason ??
             "No screenshots or video available for this project yet."}
         </p>
@@ -54,11 +54,11 @@ export function MediaGallery({
         )}
         {/* Placeholder pattern behind if image fails */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 bg-[repeating-linear-gradient(45deg,--theme(--color-white/5)_0,--theme(--color-white/5)_1px,transparent_1px,transparent_10px)]"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[repeating-linear-gradient(45deg,theme(colors.white/5)_0,theme(colors.white/5)_1px,transparent_1px,transparent_10px)]"
           aria-hidden
         />
         {current.type === "video" ? (
-          <div className="pointer-events-none absolute right-3 top-3 flex items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-white/90">
+          <div className="pointer-events-none absolute right-3 top-3 flex items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-[12px] font-medium uppercase tracking-wider text-white/90">
             <Play className="h-3 w-3" /> video
           </div>
         ) : null}
@@ -86,7 +86,7 @@ export function MediaGallery({
       </div>
       {media.length > 1 ? (
         <div className="flex items-center justify-between border-t border-border bg-surface px-3 py-2">
-          <div className="text-[11px] text-muted-foreground">{current.alt}</div>
+          <div className="text-[13px] text-muted-foreground">{current.alt}</div>
           <div className="flex gap-1.5">
             {media.map((_, k) => (
               <button
@@ -102,7 +102,7 @@ export function MediaGallery({
           </div>
         </div>
       ) : (
-        <div className="border-t border-border bg-surface px-3 py-2 text-[11px] text-muted-foreground">
+        <div className="border-t border-border bg-surface px-3 py-2 text-[13px] text-muted-foreground">
           {current.alt}
         </div>
       )}

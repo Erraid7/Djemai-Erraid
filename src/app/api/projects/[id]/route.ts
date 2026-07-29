@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { projects } from "@/lib/seed/projects";
 
+const DJANGO_API_URL = process.env.DJANGO_API_URL ?? "http://localhost:8000/api";
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -8,8 +10,14 @@ export async function GET(
   const { id: idParam } = await params;
   const id = Number(idParam);
 
-  // MOCK: replace with `await prisma.project.findUnique({ where: { id } })`.
-  const project = projects.find((p) => p.id === id);
+  const res = await fetch(`${DJANGO_API_URL}/projects/${id}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const body = await res.json();
+  const project = body.data;
 
   if (!project) {
     return NextResponse.json(
@@ -26,10 +34,5 @@ export async function GET(
     status: 200,
     statusText: "OK",
     data: project,
-    tests: [
-      { label: "status is 200", pass: true },
-      { label: "has field 'stack'", pass: Array.isArray(project.stack) },
-      { label: "has field 'links'", pass: !!project.links },
-    ],
   });
 }

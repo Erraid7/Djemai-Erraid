@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
-import { profile } from "@/lib/seed/profile";
+
+const DJANGO_API_URL = process.env.DJANGO_API_URL ?? "http://localhost:8000/api";
 
 export async function GET() {
-  // MOCK: replace with `await prisma.profile.findFirst()` in the backend phase.
+  
+  const res = await fetch(`${DJANGO_API_URL}/about/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const body = await res.json();
   return NextResponse.json({
-    status: 200,
-    statusText: "OK",
-    data: profile,
+    status: res.status,
+    statusText: res.statusText,
+    data: body.data,
   });
 }

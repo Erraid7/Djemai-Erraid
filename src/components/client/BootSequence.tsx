@@ -67,11 +67,11 @@ export function BootSequence() {
       onClick={skip}
       onKeyDown={skip}
       tabIndex={0}
-      className={`fixed inset-0 z-[100] flex cursor-pointer flex-col items-start justify-center bg-background px-8 transition-opacity duration-[400ms] sm:px-16 ${
+      className={`fixed inset-0 z-100 flex cursor-pointer flex-col items-start justify-center bg-background px-8 transition-opacity duration-400 sm:px-16 ${
         exiting ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
-      <div className="mono w-full max-w-lg space-y-2 text-sm text-muted-foreground">
+      <div className="mono w-full max-w-lg space-y-2 text-base text-muted-foreground">
         {LINES.slice(0, linesShown).map((line, i) => (
           <div
             key={i}
@@ -84,7 +84,7 @@ export function BootSequence() {
           <span className="caret-blink text-primary">▍</span>
         )}
       </div>
-      <div className="mono absolute bottom-6 right-8 text-[10px] uppercase tracking-widest text-muted-foreground/60">
+      <div className="mono absolute bottom-6 right-8 text-[12px] uppercase tracking-widest text-muted-foreground/60">
         click to skip
       </div>
     </div>

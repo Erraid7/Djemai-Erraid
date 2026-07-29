@@ -16,11 +16,11 @@ export function ProjectListPreview({
           <h2 className="text-lg font-semibold text-foreground">
             {projects.length} projects
           </h2>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             The sidebar pins the highlights. Everything the API returns is here.
           </p>
         </div>
-        <span className="mono rounded-md border border-border bg-surface-2 px-2 py-1 text-[11px] text-muted-foreground">
+        <span className="mono rounded-md border border-border bg-surface-2 px-2 py-1 text-[13px] text-muted-foreground">
           Project[]
         </span>
       </div>
@@ -32,7 +32,7 @@ export function ProjectListPreview({
           return (
             <li
               key={p.id}
-              className="animate-in fade-in slide-in-from-bottom-1 duration-500 fill-mode-[backwards]"
+              className="animate-in fade-in slide-in-from-bottom-1 duration-500 [animation-fill-mode:backwards]"
               style={{ animationDelay: `${i * 55}ms` }}
             >
               <button
@@ -56,25 +56,25 @@ export function ProjectListPreview({
                           aria-label="pinned"
                         />
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-border-strong bg-surface-3 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-border-strong bg-surface-3 px-1.5 py-0.5 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">
                           <EyeOff className="h-3 w-3" /> hidden
                         </span>
                       )}
-                      <span className="mono rounded bg-surface-2 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                      <span className="mono rounded bg-surface-2 px-1.5 py-0.5 text-[12px] text-muted-foreground">
                         id: {p.id}
                       </span>
                     </div>
-                    <div className="mt-0.5 text-xs text-muted-foreground">
+                    <div className="mt-0.5 text-sm text-muted-foreground">
                       {p.role}
                     </div>
                   </div>
-                  <span className="mono inline-flex shrink-0 items-center gap-1 text-xs font-medium text-muted-foreground transition-all group-hover:gap-1.5 group-hover:text-primary">
+                  <span className="mono inline-flex shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground transition-all group-hover:gap-1.5 group-hover:text-primary">
                     details
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
 
-                <p className="text-sm leading-relaxed text-foreground/85">
+                <p className="text-base leading-relaxed text-foreground/85">
                   {p.summary}
                 </p>
 
@@ -82,13 +82,13 @@ export function ProjectListPreview({
                   {preview.map((s) => (
                     <span
                       key={s}
-                      className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-[10.5px] text-foreground/80"
+                      className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-[12.5px] text-foreground/80"
                     >
                       {s}
                     </span>
                   ))}
                   {extra > 0 ? (
-                    <span className="mono rounded border border-dashed border-border px-1.5 py-0.5 text-[10.5px] text-muted-foreground">
+                    <span className="mono rounded border border-dashed border-border px-1.5 py-0.5 text-[12.5px] text-muted-foreground">
                       +{extra} more
                     </span>
                   ) : null}

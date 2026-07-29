@@ -25,7 +25,7 @@ export const projects: Project[] = [
     links: {
       live: { available: true, url: "https://esi-flow.vercel.app" },
       github: { available: true, url: "https://github.com/Erraid7/esi_flow_front" },
-      demoVideo: { available: true, url:"https://drive.google.com/file/u/0/d/1tgZCjCQEHpD4X_ky7EZoUFjWV6vSUqin/view" },
+      demoVideo: { available: true, url: "https://drive.google.com/file/u/0/d/1tgZCjCQEHpD4X_ky7EZoUFjWV6vSUqin/view" },
     },
     docsMarkdown:
       "## ESI Flow\n\nESI Flow is a multi-role SaaS platform built to give ESI's students, technicians, and admins a single system for filing, tracking, and resolving requests — the kind of internal tool a school actually needs but rarely has.\n\nAs team lead on a 5-person team, I owned the system design and database architecture from the start: a Prisma/PostgreSQL schema supporting 3 distinct user roles, each with different permissions enforced through JWT-secured role-based access control. I wrote roughly 80% of the Express/TypeScript backend myself, while coordinating the rest of the team through Agile sprints — planning, reviewing, and keeping the whole thing shippable rather than just architecturally correct.\n\nThe frontend spans 15+ pages across the three roles, backed by a REST API validated with function and integration tests before deployment. It's live today on Vercel (frontend) and Render (backend), not a class demo that only ran once.",
@@ -98,7 +98,7 @@ export const projects: Project[] = [
     ],
     stack: ["Python", "LLM APIs", "Multi-agent systems"],
     media: [
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785268059/ChatGPT_Image_Jul_28_2026_08_37_35_PM_dlhrls.png", alt: "Refactoring Swarm pipeline"}
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785268059/ChatGPT_Image_Jul_28_2026_08_37_35_PM_dlhrls.png", alt: "Refactoring Swarm pipeline" },
     ],
     links: {
       live: { available: false, reason: "This is a CLI/pipeline tool, not a hosted app — no live URL applies." },
@@ -155,7 +155,7 @@ export const projects: Project[] = [
       { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191799/Capture_d_%C3%A9cran_2026-07-27_233429_b7ijxx.png", alt: "ESI Run pass details" },
       { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191795/Capture_d_%C3%A9cran_2026-07-27_233507_mqzkwo.png", alt: "ESI Run new pass" },
       { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233540_jrnxqa.png", alt: "ESI Run complaints" },
-      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233559_yktook.png", alt: "ESI Run new complaint" }
+      { type: "image", src: "https://res.cloudinary.com/umxjpowx/image/upload/v1785191796/Capture_d_%C3%A9cran_2026-07-27_233559_yktook.png", alt: "ESI Run new complaint" },
     ],
     links: {
       live: { available: false, reason: "Desktop application, there's no hosted version." },
@@ -165,7 +165,6 @@ export const projects: Project[] = [
     docsMarkdown:
       "## ESI Run\n\nESI Run is a desktop management system for a public-transportation network: user accounts, transit pass issuance and renewal, complaint handling, and pass validation, all in one Java/JavaFX application.\n\nI implemented the full business logic across these subsystems with CSV-based persistence, then backed it with unit and integration tests across the user, pass, and validation flows — the part of the project that mattered most, since a transit system with silent validation bugs is worse than no system at all.\n\nIt's a good example of solid engineering discipline outside the web stack I use most: same care about correctness and testing, applied to a desktop Java codebase instead of a REST API.",
   },
-  
 
   // Hidden -- confidential client project, intentionally not pinned in the
   // sidebar. Reachable only by editing the URL bar to /api/projects/7.

@@ -26,7 +26,7 @@ export function LinkButtons({ links }: { links: Project["links"] }) {
               target="_blank"
               rel="noreferrer noopener"
               className={cn(
-                "group inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs font-medium text-foreground",
+                "group inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm font-medium text-foreground",
                 "transition-colors hover:border-ring hover:bg-surface-3",
               )}
             >
@@ -43,7 +43,7 @@ export function LinkButtons({ links }: { links: Project["links"] }) {
             key={k}
             title={entry.reason}
             className={cn(
-              "inline-flex max-w-full items-start gap-2 rounded-md border border-dashed border-border bg-surface/40 px-3 py-1.5 text-xs text-muted-foreground",
+              "inline-flex max-w-full items-start gap-2 rounded-md border border-dashed border-border bg-surface/40 px-3 py-1.5 text-sm text-muted-foreground",
             )}
           >
             <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0" />

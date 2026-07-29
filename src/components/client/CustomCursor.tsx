@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
+// Elements that should visually "activate" the cursor. Add
+// data-cursor="interactive" to anything else you want included (e.g. a
+// custom card that isn't a real <button>).
 const INTERACTIVE_SELECTOR =
   'a, button, [role="button"], input, textarea, select, summary, [data-cursor="interactive"]';
 
@@ -13,9 +16,14 @@ export function CustomCursor() {
 
   useEffect(() => {
     const canHover = window.matchMedia("(pointer: fine)").matches;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
     if (!canHover || reducedMotion) return;
 
+    // Intentional: matchMedia is only available client-side, so this has to
+    // be decided in an effect on mount, not during render.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setEnabled(true);
     document.documentElement.classList.add("custom-cursor-active");
@@ -33,12 +41,18 @@ export function CustomCursor() {
         dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       }
     }
+
     function onOver(e: MouseEvent) {
-      if ((e.target as Element).closest?.(INTERACTIVE_SELECTOR)) setHovering(true);
+      if ((e.target as Element).closest?.(INTERACTIVE_SELECTOR)) {
+        setHovering(true);
+      }
     }
     function onOut(e: MouseEvent) {
-      if ((e.target as Element).closest?.(INTERACTIVE_SELECTOR)) setHovering(false);
+      if ((e.target as Element).closest?.(INTERACTIVE_SELECTOR)) {
+        setHovering(false);
+      }
     }
+
     function tick() {
       ringX += (mouseX - ringX) * 0.18;
       ringY += (mouseY - ringY) * 0.18;
@@ -66,12 +80,18 @@ export function CustomCursor() {
 
   return (
     <>
-      <div ref={dotRef} aria-hidden className="pointer-events-none fixed left-0 top-0 z-200 h-1.5 w-1.5 rounded-full bg-primary" />
+      <div
+        ref={dotRef}
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-0 z-200 h-1.5 w-1.5 rounded-full bg-primary"
+      />
       <div
         ref={ringRef}
         aria-hidden
         className={`pointer-events-none fixed left-0 top-0 z-200 rounded-full border transition-[width,height,background-color,border-color] duration-200 ${
-          hovering ? "h-10 w-10 border-primary bg-primary/10" : "h-7 w-7 border-primary/50 bg-transparent"
+          hovering
+            ? "h-10 w-10 border-primary bg-primary/10"
+            : "h-7 w-7 border-primary/50 bg-transparent"
         }`}
       />
     </>

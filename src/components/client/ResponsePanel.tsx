@@ -24,6 +24,8 @@ import type { ApiEnvelope, Project } from "@/lib/types";
 import { StatusBadge } from "./badges";
 import { ProjectPreview } from "./ProjectPreview";
 import { ProjectListPreview } from "./ProjectListPreview";
+import { ServicesView } from "./ServicesView";
+import type { Service } from "@/lib/seed/services";
 import { HomeView } from "./HomeView";
 import { AboutView } from "./AboutView";
 import type { HttpMethod } from "@/hooks/useApiClient";
@@ -51,7 +53,7 @@ export function ResponsePanel({
   return (
     <section className="flex min-h-0 flex-1 flex-col bg-background">
       <header className="flex flex-wrap items-center gap-3 border-b border-border bg-surface px-4 py-2.5">
-        <div className="mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        <div className="mono text-[12px] uppercase tracking-widest text-muted-foreground">
           Response
         </div>
         {response ? (
@@ -61,7 +63,7 @@ export function ResponsePanel({
               statusText={response.statusText}
             />
             {response._meta ? (
-              <div className="mono flex items-center gap-3 text-[11px] text-muted-foreground">
+              <div className="mono flex items-center gap-3 text-[13px] text-muted-foreground">
                 <span>
                   time <span className="text-foreground">{response._meta.time}ms</span>
                 </span>
@@ -76,7 +78,7 @@ export function ResponsePanel({
             ) : null}
           </>
         ) : (
-          <span className="text-xs text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             Fire a request to see the response.
           </span>
         )}
@@ -160,7 +162,7 @@ function ModeButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 text-[11px] font-medium transition-colors",
+        "px-3 py-1.5 text-[13px] font-medium transition-colors",
         active
           ? "bg-surface-3 text-foreground"
           : "bg-surface text-muted-foreground hover:text-foreground",
@@ -175,10 +177,10 @@ function EmptyState({ method }: { method: HttpMethod }) {
   return (
     <div className="flex h-full items-center justify-center p-10 text-center">
       <div>
-        <div className="mono text-xs uppercase tracking-widest text-muted-foreground">
+        <div className="mono text-sm uppercase tracking-widest text-muted-foreground">
           idle
         </div>
-        <p className="mt-2 max-w-md text-sm text-muted-foreground">
+        <p className="mt-2 max-w-md text-base text-muted-foreground">
           {method === "GET"
             ? "Pick a request from the sidebar or hit Send to fire the current one."
             : "This is a POST endpoint — Send when you're ready."}
@@ -190,7 +192,7 @@ function EmptyState({ method }: { method: HttpMethod }) {
 
 function PrettyJson({ data }: { data: unknown }) {
   return (
-    <pre className="mono whitespace-pre-wrap wrap-break-word p-4 text-[12.5px] leading-relaxed text-foreground/85">
+    <pre className="mono whitespace-pre-wrap break-words p-4 text-[14.5px] leading-relaxed text-foreground/85">
       {JSON.stringify(data, null, 2)}
     </pre>
   );
@@ -200,9 +202,6 @@ function PreviewBody({
   response,
   onOpenProject,
   onExpand,
-  // Reserved for a future interactive-retry feature (e.g. re-firing a request
-  // with edited params directly from the preview) -- not consumed yet.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onSendRaw,
 }: {
   response: ApiEnvelope<unknown>;
@@ -230,7 +229,7 @@ function PreviewBody({
           <h3 className="text-base font-semibold text-foreground">
             Message queued
           </h3>
-          <p className="mt-1 max-w-xs text-sm text-muted-foreground">
+          <p className="mt-1 max-w-xs text-base text-muted-foreground">
             Server accepted your message. In the real backend this would send an
             email and store the row.
           </p>
@@ -247,6 +246,15 @@ function PreviewBody({
           projects={data as Project[]}
           onOpen={onOpenProject}
         />
+      </div>
+    );
+  }
+
+  // Services[]
+  if (Array.isArray(data) && data.length > 0 && isRecord(data[0]) && "deliverables" in data[0]) {
+    return (
+      <div className="p-5">
+        <ServicesView services={data as Service[]} onOpenProject={onOpenProject} />
       </div>
     );
   }
@@ -273,6 +281,7 @@ function PreviewBody({
           stats?: { value: string; label: string }[];
           howToUse: string[];
         }}
+        onNavigate={(url, method) => onSendRaw(url, method)}
       />
     );
   }
@@ -343,10 +352,10 @@ function ErrorCard({ status, data }: { status: number; data: unknown }) {
       >
         <Icon className="mt-0.5 h-5 w-5 shrink-0" />
         <div className="min-w-0">
-          <div className="mono text-[11px] uppercase tracking-widest">
+          <div className="mono text-[13px] uppercase tracking-widest">
             {status} error
           </div>
-          <p className="mt-1 text-sm text-foreground">{message}</p>
+          <p className="mt-1 text-base text-foreground">{message}</p>
         </div>
       </div>
     </div>
@@ -403,7 +412,7 @@ function SkillsGrid({
           <div
             key={cat.id}
             className={cn(
-              "animate-in fade-in slide-in-from-bottom-1 rounded-xl border border-border border-l-2 bg-card p-4 duration-500 fill-mode-[backwards]",
+              "animate-in fade-in slide-in-from-bottom-1 rounded-xl border border-border border-l-2 bg-card p-4 duration-500 [animation-fill-mode:backwards]",
               accent,
             )}
             style={{ animationDelay: `${i * 60}ms` }}
@@ -411,11 +420,11 @@ function SkillsGrid({
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Icon className="h-4 w-4 text-primary" />
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className="text-base font-semibold text-foreground">
                   {cat.label}
                 </h3>
               </div>
-              <span className="mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <span className="mono text-[12px] uppercase tracking-widest text-muted-foreground">
                 {cat.items.length}
               </span>
             </div>
@@ -423,7 +432,7 @@ function SkillsGrid({
               {cat.items.map((s) => (
                 <span
                   key={s}
-                  className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[11.5px] text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
+                  className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[13.5px] text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
                 >
                   {s}
                 </span>
@@ -459,7 +468,7 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
       <ol className="relative space-y-3 border-l border-border pl-5">
         <span
           aria-hidden
-          className="absolute -left-px top-0 w-px origin-top animate-in fade-in bg-linear-to-b from-primary/60 to-transparent duration-700"
+          className="absolute -left-px top-0 w-px origin-top animate-in fade-in bg-gradient-to-b from-primary/60 to-transparent duration-700"
           style={{ height: "100%" }}
         />
         {experience.map((e, i) => {
@@ -468,12 +477,12 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
           return (
             <li
               key={i}
-              className="relative animate-in fade-in slide-in-from-left-2 duration-500 fill-mode-[backwards]"
+              className="relative animate-in fade-in slide-in-from-left-2 duration-500 [animation-fill-mode:backwards]"
               style={{ animationDelay: `${150 + i * 90}ms` }}
             >
               <span
                 className={cn(
-                  "absolute -left-6.75 top-2 h-2 w-2 rounded-full ring-4 ring-background",
+                  "absolute -left-[27px] top-2 h-2 w-2 rounded-full ring-4 ring-background",
                   isActive ? "bg-primary animate-pulse" : "bg-border-strong",
                 )}
               />
@@ -484,25 +493,25 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
                 )}
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h3 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                  <h3 className="flex items-center gap-1.5 text-base font-semibold text-foreground">
                     <Icon className="h-3.5 w-3.5 text-primary" />
                     {e.role}
                     {isActive && (
-                      <span className="mono ml-1 rounded-full border border-primary/40 bg-primary/10 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-primary">
+                      <span className="mono ml-1 rounded-full border border-primary/40 bg-primary/10 px-1.5 py-0.5 text-[11px] uppercase tracking-wider text-primary">
                         active
                       </span>
                     )}
                   </h3>
-                  <span className="mono text-[11px] text-muted-foreground">
+                  <span className="mono text-[13px] text-muted-foreground">
                     {e.period}
                   </span>
                 </div>
-                <div className="text-xs text-primary">{e.org}</div>
+                <div className="text-sm text-primary">{e.org}</div>
                 <ul className="mt-2 space-y-1.5">
                   {e.bullets.map((b, k) => (
                     <li
                       key={k}
-                      className="relative pl-4 text-sm text-muted-foreground"
+                      className="relative pl-4 text-base text-muted-foreground"
                     >
                       <span
                         aria-hidden
@@ -556,7 +565,7 @@ export function ContactCompose({
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-sm outline-none focus:border-ring"
+            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
           />
         </Field>
         <Field label="email">
@@ -565,7 +574,7 @@ export function ContactCompose({
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-sm outline-none focus:border-ring"
+            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
           />
         </Field>
       </div>
@@ -575,14 +584,14 @@ export function ContactCompose({
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full rounded-md border border-border bg-input px-3 py-2 text-sm outline-none focus:border-ring"
+          className="w-full rounded-md border border-border bg-input px-3 py-2 text-base outline-none focus:border-ring"
         />
       </Field>
       <div>
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-70"
+          className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-70"
         >
           {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
           Send message (POST)
@@ -601,7 +610,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <div className="mono mb-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+      <div className="mono mb-1 text-[12px] uppercase tracking-widest text-muted-foreground">
         {label}
       </div>
       {children}

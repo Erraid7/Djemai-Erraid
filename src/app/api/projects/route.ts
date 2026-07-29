@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import { projects } from "@/lib/seed/projects";
 
+const DJANGO_API_URL = process.env.DJANGO_API_URL ?? "http://localhost:8000/api";
+
 export async function GET() {
-  // MOCK: replace with `await prisma.project.findMany()` in the backend phase.
+  const res = await fetch(`${DJANGO_API_URL}/projects/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const body = await res.json();
   return NextResponse.json({
-    status: 200,
-    statusText: "OK",
-    data: projects,
-    tests: [
-      { label: "status is 200", pass: true },
-      { label: "returns array", pass: Array.isArray(projects) },
-      { label: `${projects.length} projects present`, pass: projects.length === 7 },
-    ],
+    status: res.status,
+    statusText: res.statusText,
+    data: body.data,
   });
 }

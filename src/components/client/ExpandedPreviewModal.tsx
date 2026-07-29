@@ -75,19 +75,19 @@ export function ExpandedPreviewModal({
         <header className="flex items-center gap-3 border-b border-border bg-surface px-5 py-3">
           <StatusBadge status={response.status} statusText={response.statusText} />
           {response._meta ? (
-            <div className="mono flex items-center gap-3 text-[11px] text-muted-foreground">
+            <div className="mono flex items-center gap-3 text-[13px] text-muted-foreground">
               <span>{response._meta.time}ms</span>
               <span>·</span>
               <span>{formatBytes(response._meta.size)}</span>
             </div>
           ) : null}
-          <div className="mono ml-2 truncate text-[12px] text-foreground/80">
+          <div className="mono ml-2 truncate text-[14px] text-foreground/80">
             expanded preview
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-2.5 py-1.5 text-sm text-muted-foreground hover:text-foreground"
           >
             <X className="h-3.5 w-3.5" /> Close
           </button>
@@ -97,7 +97,7 @@ export function ExpandedPreviewModal({
           {isProject ? (
             <ProjectPreview project={project} />
           ) : (
-            <pre className="mono whitespace-pre-wrap text-xs text-foreground/80">
+            <pre className="mono whitespace-pre-wrap text-sm text-foreground/80">
               {JSON.stringify(response.data, null, 2)}
             </pre>
           )}

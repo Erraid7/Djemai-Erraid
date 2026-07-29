@@ -15,7 +15,7 @@ export const home = {
   // if those change.
   stats: [
     { value: "7", label: "projects shipped" },
-    { value: "3", label: "live deployments" },
+    { value: "2", label: "live deployments" },
     { value: "3", label: "platforms — web, mobile, desktop" },
     { value: "30+", label: "technologies across the stack" },
   ],

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Home, UserRound, FolderGit2, Wrench, BriefcaseBusiness, Mail, Lock } from "lucide-react";
+import { Home, UserRound, FolderGit2, Wrench, BriefcaseBusiness, Sparkles, Mail, Lock } from "lucide-react";
 
 export type CollectionItem = {
   method: "GET" | "POST";
@@ -15,10 +15,14 @@ export type Collection = {
 
 export const collections: Collection[] = [
   {
-    label: "Profile",
+    label: "Overview",
     items: [
       { method: "GET", url: "/api/home", icon: Home },
       { method: "GET", url: "/api/about", icon: UserRound },
+
+      { method: "GET", url: "/api/skills", icon: Wrench },
+      { method: "GET", url: "/api/experience", icon: BriefcaseBusiness },
+      { method: "GET", url: "/api/services", icon: Sparkles },
     ],
   },
   {
@@ -33,8 +37,11 @@ export const collections: Collection[] = [
       { method: "GET", url: "/api/projects/6", icon: FolderGit2 },
     ],
   },
-  { label: "Skills", items: [{ method: "GET", url: "/api/skills", icon: Wrench }] },
-  { label: "Experience", items: [{ method: "GET", url: "/api/experience", icon: BriefcaseBusiness }] },
-  { label: "Contact", items: [{ method: "POST", url: "/api/contact", icon: Mail }] },
-  { label: "???", items: [{ method: "POST", url: "/api/auth/login", locked: true, icon: Lock }] },
+  {
+    label: "Actions",
+    items: [
+      { method: "POST", url: "/api/contact", icon: Mail },
+      { method: "POST", url: "/api/auth/login", locked: true, icon: Lock },
+    ],
+  },
 ];

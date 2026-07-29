@@ -175,6 +175,9 @@
   }
 }
 
+/* Applied to <html> by CustomCursor once mounted, pointer:fine, and motion
+   is allowed -- keeps the native cursor for anyone the component itself
+   already decided to skip (touch devices, reduced-motion, no JS). */
 .custom-cursor-active,
 .custom-cursor-active * {
   cursor: none !important;

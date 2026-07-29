@@ -49,7 +49,7 @@ export function RequestTabBody({
 function ParamsView({ params }: { params: { key: string; value: string }[] }) {
   if (params.length === 0) {
     return (
-      <p className="text-xs text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         No path parameters in this URL. Try{" "}
         <code className="mono text-foreground">/api/projects/1</code>.
       </p>
@@ -57,8 +57,8 @@ function ParamsView({ params }: { params: { key: string; value: string }[] }) {
   }
   return (
     <div className="overflow-hidden rounded-md border border-border">
-      <table className="w-full text-sm">
-        <thead className="bg-surface text-[10px] uppercase tracking-widest text-muted-foreground">
+      <table className="w-full text-base">
+        <thead className="bg-surface text-[12px] uppercase tracking-widest text-muted-foreground">
           <tr>
             <th className="px-3 py-1.5 text-left font-medium">key</th>
             <th className="px-3 py-1.5 text-left font-medium">value</th>
@@ -87,7 +87,7 @@ function HeadersView({ method }: { method: HttpMethod }) {
   ];
   return (
     <div className="overflow-hidden rounded-md border border-border">
-      <table className="w-full text-sm">
+      <table className="w-full text-base">
         <tbody>
           {headers.map((h) => (
             <tr key={h.key} className="border-t border-border first:border-t-0">
@@ -105,7 +105,7 @@ function HeadersView({ method }: { method: HttpMethod }) {
 
 function EmptyBody({ method }: { method: HttpMethod }) {
   return (
-    <p className="text-xs text-muted-foreground">
+    <p className="text-sm text-muted-foreground">
       {method === "GET"
         ? "GET requests have no body."
         : "No body composer for this endpoint."}
@@ -133,7 +133,7 @@ function LoginPoke({
     >
       <div className="grid gap-2">
         <label className="block">
-          <div className="mono mb-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+          <div className="mono mb-1 text-[12px] uppercase tracking-widest text-muted-foreground">
             email
           </div>
           <input
@@ -141,11 +141,11 @@ function LoginPoke({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-sm outline-none focus:border-ring"
+            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
           />
         </label>
         <label className="block">
-          <div className="mono mb-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+          <div className="mono mb-1 text-[12px] uppercase tracking-widest text-muted-foreground">
             password
           </div>
           <input
@@ -153,11 +153,11 @@ function LoginPoke({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-sm outline-none focus:border-ring"
+            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
           />
         </label>
       </div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Spoiler: I won&apos;t authenticate you anyway — this route is real, but
         no combination of these fields gets you in. Send it and see what comes
         back.
@@ -166,7 +166,7 @@ function LoginPoke({
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs font-medium text-foreground hover:border-ring disabled:opacity-70"
+          className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm font-medium text-foreground hover:border-ring disabled:opacity-70"
         >
           Try to log in
         </button>
@@ -192,13 +192,13 @@ function DocsView({
 
   if (project) {
     return (
-      <article className="prose-portfolio mono max-w-none whitespace-pre-wrap text-[13px] leading-relaxed text-foreground/85">
+      <article className="prose-portfolio mono max-w-none whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/85">
         {project.docsMarkdown}
       </article>
     );
   }
   return (
-    <div className="space-y-2 text-sm text-muted-foreground">
+    <div className="space-y-2 text-base text-muted-foreground">
       <p>
         The <span className="mono text-foreground">Docs</span> tab shows the
         long-form case study for a single project response.
@@ -208,7 +208,7 @@ function DocsView({
         <span className="mono text-foreground">GET /api/projects/1</span> and
         switch back here.
       </p>
-      <p className="mono text-[11px] text-muted-foreground/70">
+      <p className="mono text-[13px] text-muted-foreground/70">
         current: {url}
       </p>
     </div>

@@ -30,14 +30,14 @@ export function AboutView({ data }: { data: AboutData }) {
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <div className="mono text-[11px] uppercase tracking-widest text-primary">
+            <div className="mono text-[13px] uppercase tracking-widest text-primary">
               {data.seeking}
             </div>
             <h2 className="mt-1 text-2xl font-semibold text-foreground">{data.name}</h2>
-            <div className="mt-1 text-sm text-muted-foreground">{data.role}</div>
+            <div className="mt-1 text-base text-muted-foreground">{data.role}</div>
           </div>
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <GraduationCap className="h-3.5 w-3.5" />
             {data.school}
@@ -54,7 +54,7 @@ export function AboutView({ data }: { data: AboutData }) {
       <div className="space-y-6 px-6 py-6">
         <div className="space-y-3">
           {data.bio.map((p, i) => (
-            <p key={i} className="text-sm leading-relaxed text-foreground/85">
+            <p key={i} className="text-base leading-relaxed text-foreground/85">
               {p}
             </p>
           ))}
@@ -62,12 +62,12 @@ export function AboutView({ data }: { data: AboutData }) {
 
         {data.journey && data.journey.length > 0 && (
           <div>
-            <p className="mono mb-2 text-[11px] uppercase tracking-widest text-muted-foreground">
+            <p className="mono mb-2 text-[13px] uppercase tracking-widest text-muted-foreground">
               journey
             </p>
             <div className="space-y-3 border-l border-border pl-4">
               {data.journey.map((p, i) => (
-                <p key={i} className="text-sm leading-relaxed text-foreground/80">
+                <p key={i} className="text-base leading-relaxed text-foreground/80">
                   {p}
                 </p>
               ))}
@@ -77,14 +77,14 @@ export function AboutView({ data }: { data: AboutData }) {
 
         {data.interests && data.interests.length > 0 && (
           <div>
-            <p className="mono mb-2 text-[11px] uppercase tracking-widest text-muted-foreground">
+            <p className="mono mb-2 text-[13px] uppercase tracking-widest text-muted-foreground">
               interests
             </p>
             <div className="flex flex-wrap gap-1.5">
               {data.interests.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-border bg-surface-2 px-3 py-1 text-xs text-foreground/85"
+                  className="rounded-full border border-border bg-surface-2 px-3 py-1 text-sm text-foreground/85"
                 >
                   {item}
                 </span>
@@ -97,7 +97,7 @@ export function AboutView({ data }: { data: AboutData }) {
           {data.email && (
             <a
               href={`mailto:${data.email}`}
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
             >
               <Mail className="h-3.5 w-3.5" /> Email
             </a>
@@ -107,7 +107,7 @@ export function AboutView({ data }: { data: AboutData }) {
               href={data.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
             >
               <Github className="h-3.5 w-3.5" /> GitHub
             </a>
@@ -117,7 +117,7 @@ export function AboutView({ data }: { data: AboutData }) {
               href={data.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
             >
               <Linkedin className="h-3.5 w-3.5" /> LinkedIn
             </a>

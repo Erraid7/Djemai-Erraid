@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { CustomCursor } from "@/components/client/CustomCursor";
+import { ImagePreloader } from "@/components/client/ImagePreloader";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -94,6 +95,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         <CustomCursor />
+        <ImagePreloader />
         {children}
       </body>
     </html>

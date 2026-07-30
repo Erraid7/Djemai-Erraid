@@ -15,9 +15,9 @@ export const home = {
   // if those change.
   stats: [
     { value: "7", label: "projects shipped" },
-    { value: "2", label: "live deployments" },
-    { value: "3", label: "platforms — web, mobile, desktop" },
-    { value: "30+", label: "technologies across the stack" },
+    { value: "3", label: "live deployments" },
+    { value: "4", label: "platforms covered" },
+    { value: "32+", label: "technologies across the stack" },
   ],
   howToUse: [
     "Pick a request from the sidebar on the left (or the menu on mobile).",

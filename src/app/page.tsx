@@ -111,7 +111,7 @@ export default function Home() {
               <Sidebar currentUrl={url} currentMethod={method} onSelect={handleSelect} />
             </SheetContent>
           </Sheet>
-          <Avatar className="h-6 w-6 shrink-0 border border-border-strong">
+          <Avatar className="h-7 w-7 shrink-0 border border-border-strong">
             <AvatarImage src={profile.photoUrl} alt={profile.name} />
             <AvatarFallback className="mono text-[9px]">
               {profile.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}

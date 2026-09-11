@@ -20,14 +20,14 @@ export function ProjectPreview({
     : undefined;
 
   return (
-    <article
-      className={cn(
-        "relative overflow-hidden rounded-xl border border-border bg-card",
-      )}
-    >
+    <article className="lit-edge overflow-hidden rounded-xl border border-border bg-card elev-2">
       {/* Header row */}
-      <header className="flex items-start gap-4 border-b border-border px-5 py-4">
-        <div className="min-w-0 flex-1">
+      <header className="relative flex items-start gap-4 border-b border-border bg-linear-to-r from-surface-2/80 to-transparent px-5 py-4">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -left-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl"
+        />
+        <div className="relative min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="truncate text-xl font-semibold tracking-tight text-foreground">
               {project.name}
@@ -50,9 +50,9 @@ export function ProjectPreview({
           <button
             type="button"
             onClick={onExpand}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
+            className="press group relative inline-flex shrink-0 items-center gap-1.5 rounded-md border border-border bg-surface-2 px-2.5 py-1.5 text-sm text-muted-foreground hover:border-ring hover:bg-surface-3 hover:text-foreground"
           >
-            <Maximize2 className="h-3.5 w-3.5" />
+            <Maximize2 className="h-3.5 w-3.5 transition-transform duration-300 ease-(--e-spring) group-hover:scale-115" />
             Expand
           </button>
         ) : null}
@@ -60,8 +60,14 @@ export function ProjectPreview({
 
       <div className={cn("grid gap-5 px-5 py-5", !compact && "lg:grid-cols-5")}>
         {/* Media */}
-        <div className={cn(!compact && "lg:col-span-3")}>
+        <div
+          className={cn("animate-fade-up", !compact && "lg:col-span-3")}
+          style={{ animationDelay: "60ms" }}
+        >
+          {/* Keyed on the project so switching projects gets a fresh gallery
+              rather than carrying over the previous slide index. */}
           <MediaGallery
+            key={project.id}
             media={project.media}
             fallbackReason={fallbackReason}
           />
@@ -69,7 +75,10 @@ export function ProjectPreview({
 
         {/* Right column */}
         <div className={cn("space-y-5", !compact && "lg:col-span-2")}>
-          <p className="text-[16px] leading-relaxed text-foreground/90">
+          <p
+            className="animate-fade-up text-[16px] leading-relaxed text-foreground/90"
+            style={{ animationDelay: "120ms" }}
+          >
             {project.summary}
           </p>
 
@@ -77,7 +86,8 @@ export function ProjectPreview({
             {project.bullets.map((b, i) => (
               <li
                 key={i}
-                className="relative pl-4 text-base leading-relaxed text-muted-foreground"
+                className="animate-fade-up relative pl-4 text-base leading-relaxed text-muted-foreground"
+                style={{ animationDelay: `${180 + i * 70}ms` }}
               >
                 <span
                   aria-hidden
@@ -89,17 +99,23 @@ export function ProjectPreview({
           </ul>
 
           <div className="flex flex-wrap gap-1.5">
-            {project.stack.map((s) => (
+            {project.stack.map((s, i) => (
               <span
                 key={s}
-                className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[13px] text-foreground/85"
+                className="mono animate-fade-up cursor-default rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[13px] text-foreground/85 transition-[transform,border-color,color] duration-200 ease-(--e-out-quart) hover:-translate-y-0.5 hover:border-primary/50 hover:text-foreground"
+                style={{ animationDelay: `${340 + i * 40}ms` }}
               >
                 {s}
               </span>
             ))}
           </div>
 
-          <LinkButtons links={project.links} />
+          <div
+            className="animate-fade-up"
+            style={{ animationDelay: `${400 + project.stack.length * 40}ms` }}
+          >
+            <LinkButtons links={project.links} />
+          </div>
         </div>
       </div>
     </article>

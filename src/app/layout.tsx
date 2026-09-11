@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { CustomCursor } from "@/components/client/CustomCursor";
+import { PreloadResources } from "@/components/client/PreloadResources";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -57,12 +58,14 @@ export const metadata: Metadata = {
     title: `${NAME} — Full-Stack Developer`,
     description: DESCRIPTION,
   },
-  verification: {
-    google: "your-google-site-verification-code",
-  },
   icons: {
     icon: "/favicon.ico"
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#25282f",
+  colorScheme: "dark",
 };
 
 const personJsonLd = {
@@ -70,7 +73,7 @@ const personJsonLd = {
   "@type": "Person",
   name: "DJEMAI Mohamed Erraid",
   jobTitle: "Full-Stack Developer",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-domain.com",
+  url: SITE_URL,
   image:
     "https://res.cloudinary.com/umxjpowx/image/upload/v1785082721/AAFuWkQu2jM_1724670310462_jnsj7m.jpg",
   sameAs: [
@@ -93,6 +96,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <PreloadResources />
         <CustomCursor />
         {children}
       </body>

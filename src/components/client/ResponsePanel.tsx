@@ -1,9 +1,12 @@
-import { useState } from "react";
+"use client";
+
+import { useMemo, useState } from "react";
 import {
   AlertTriangle,
   ShieldAlert,
   Send,
   Check,
+  Copy,
   Loader2,
   Layout,
   Server,
@@ -18,6 +21,9 @@ import {
   GraduationCap,
   Presentation,
   BriefcaseBusiness,
+  Clock,
+  HardDrive,
+  MousePointerClick,
   type LucideIcon,
 } from "lucide-react";
 import type { ApiEnvelope, Project } from "@/lib/types";
@@ -50,9 +56,13 @@ export function ResponsePanel({
 }) {
   const [mode, setMode] = useState<Mode>("preview");
 
+  // Identity of the current render, so switching responses remounts the body
+  // and replays its entrance instead of swapping content in place.
+  const renderKey = `${response?.status ?? "none"}-${response?._meta?.time ?? 0}`;
+
   return (
-    <section className="flex min-h-0 flex-1 flex-col bg-background">
-      <header className="flex flex-wrap items-center gap-3 border-b border-border bg-surface px-4 py-2.5">
+    <section className="relative flex min-h-0 flex-1 flex-col">
+      <header className="relative z-10 flex flex-wrap items-center gap-3 border-b border-border bg-surface px-4 py-2.5">
         <div className="mono text-[12px] uppercase tracking-widest text-muted-foreground">
           Response
         </div>
@@ -63,13 +73,16 @@ export function ResponsePanel({
               statusText={response.statusText}
             />
             {response._meta ? (
-              <div className="mono flex items-center gap-3 text-[13px] text-muted-foreground">
-                <span>
-                  time <span className="text-foreground">{response._meta.time}ms</span>
+              <div className="mono flex items-center gap-2 text-[12.5px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1 rounded border border-border bg-surface-2 px-1.5 py-0.5">
+                  <Clock className="h-3 w-3" />
+                  <span className="tabular-nums text-foreground">
+                    {response._meta.time}
+                  </span>
+                  ms
                 </span>
-                <span>·</span>
-                <span>
-                  size{" "}
+                <span className="inline-flex items-center gap-1 rounded border border-border bg-surface-2 px-1.5 py-0.5">
+                  <HardDrive className="h-3 w-3" />
                   <span className="text-foreground">
                     {formatBytes(response._meta.size)}
                   </span>
@@ -84,10 +97,10 @@ export function ResponsePanel({
         )}
 
         {loading && response ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+          <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
         ) : null}
 
-        <div className="ml-auto inline-flex overflow-hidden rounded-md border border-border">
+        <div className="ml-auto inline-flex overflow-hidden rounded-md border border-border bg-surface">
           <ModeButton
             active={mode === "preview"}
             onClick={() => setMode("preview")}
@@ -103,23 +116,25 @@ export function ResponsePanel({
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div
+        className={cn(
+          "min-h-0 flex-1 overflow-y-auto",
+          // Fade the whole body slightly while a follow-up request is in
+          // flight: clearly "stale" without the jarring blank of a full reset.
+          "transition-opacity duration-200",
+          loading && response ? "opacity-55" : "opacity-100",
+        )}
+      >
         {loading && !response ? (
           <ResponseSkeleton />
         ) : !response ? (
           <EmptyState method={method} />
         ) : mode === "pretty" ? (
-          <div
-            key={`pretty-${response.status}-${response._meta?.time ?? 0}`}
-            className="animate-in fade-in duration-200"
-          >
+          <div key={`pretty-${renderKey}`} className="animate-fade-up">
             <PrettyJson data={response} />
           </div>
         ) : (
-          <div
-            key={`preview-${response.status}-${response._meta?.time ?? 0}`}
-            className="animate-in fade-in slide-in-from-bottom-1 duration-200"
-          >
+          <div key={`preview-${renderKey}`} className="animate-fade-up">
             <PreviewBody
               response={response}
               onOpenProject={onOpenProject}
@@ -133,16 +148,31 @@ export function ResponsePanel({
   );
 }
 
+/** Mirrors the real profile-card layout so the swap to content doesn't jump. */
 function ResponseSkeleton() {
   return (
-    <div className="space-y-4 p-5" aria-hidden>
-      <div className="skeleton-shimmer h-20 w-20 rounded-full" />
-      <div className="skeleton-shimmer h-5 w-48 rounded-md" />
-      <div className="skeleton-shimmer h-4 w-72 rounded-md" />
-      <div className="skeleton-shimmer h-32 w-full rounded-xl" />
-      <div className="grid grid-cols-2 gap-3">
-        <div className="skeleton-shimmer h-16 rounded-xl" />
-        <div className="skeleton-shimmer h-16 rounded-xl" />
+    <div className="p-5" aria-hidden>
+      <div className="mx-auto grid max-w-4xl gap-8 py-6 md:grid-cols-[280px_1fr]">
+        <div className="skeleton-shimmer mx-auto aspect-4/5 w-full max-w-70 rounded-3xl" />
+        <div className="space-y-4">
+          <div className="skeleton-shimmer h-3 w-28 rounded-full" />
+          <div className="skeleton-shimmer h-9 w-4/5 rounded-lg" />
+          <div className="skeleton-shimmer h-4 w-2/3 rounded-md" />
+          <div className="space-y-2 pt-2">
+            <div className="skeleton-shimmer h-3.5 w-full rounded-md" />
+            <div className="skeleton-shimmer h-3.5 w-11/12 rounded-md" />
+          </div>
+          <div className="grid grid-cols-2 gap-2.5 pt-2 sm:grid-cols-4">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="skeleton-shimmer h-16 rounded-xl" />
+            ))}
+          </div>
+          <div className="flex gap-2.5 pt-2">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="skeleton-shimmer h-10 w-32 rounded-full" />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -162,12 +192,18 @@ function ModeButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 text-[13px] font-medium transition-colors",
+        "relative px-3 py-1.5 text-[13px] font-medium transition-colors duration-200",
         active
           ? "bg-surface-3 text-foreground"
-          : "bg-surface text-muted-foreground hover:text-foreground",
+          : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
       )}
     >
+      {active ? (
+        <span
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary to-transparent"
+        />
+      ) : null}
       {children}
     </button>
   );
@@ -176,7 +212,10 @@ function ModeButton({
 function EmptyState({ method }: { method: HttpMethod }) {
   return (
     <div className="flex h-full items-center justify-center p-10 text-center">
-      <div>
+      <div className="animate-fade-up">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-surface-2 text-muted-foreground">
+          <MousePointerClick className="h-5 w-5" />
+        </div>
         <div className="mono text-sm uppercase tracking-widest text-muted-foreground">
           idle
         </div>
@@ -190,11 +229,94 @@ function EmptyState({ method }: { method: HttpMethod }) {
   );
 }
 
+// -- Pretty JSON -----------------------------------------------------------
+
+type Token = { text: string; cls: string };
+
+// One pass over a line, classifying the four JSON literal shapes. Strings are
+// matched first (and a trailing ":" promotes one to a key) so punctuation and
+// numbers inside a string are never highlighted as syntax.
+const TOKEN_RE =
+  /("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false)\b|\b(null)\b|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g;
+
+function tokenizeLine(line: string): Token[] {
+  const out: Token[] = [];
+  let last = 0;
+  for (const m of line.matchAll(TOKEN_RE)) {
+    const start = m.index;
+    if (start > last) out.push({ text: line.slice(last, start), cls: "json-punct" });
+
+    if (m[1] !== undefined) {
+      const isKey = m[2] !== undefined;
+      out.push({ text: m[1], cls: isKey ? "json-key" : "json-string" });
+      if (isKey) out.push({ text: m[2]!, cls: "json-punct" });
+    } else if (m[3] !== undefined) {
+      out.push({ text: m[3], cls: "json-boolean" });
+    } else if (m[4] !== undefined) {
+      out.push({ text: m[4], cls: "json-null" });
+    } else if (m[5] !== undefined) {
+      out.push({ text: m[5], cls: "json-number" });
+    }
+    last = start + m[0].length;
+  }
+  if (last < line.length) out.push({ text: line.slice(last), cls: "json-punct" });
+  return out;
+}
+
 function PrettyJson({ data }: { data: unknown }) {
+  const raw = useMemo(() => JSON.stringify(data, null, 2) ?? "", [data]);
+  const lines = useMemo(() => raw.split("\n"), [raw]);
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(raw);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      // Clipboard blocked (insecure context / permissions) -- nothing useful
+      // to do but leave the button in its idle state.
+    }
+  }
+
   return (
-    <pre className="mono whitespace-pre-wrap break-words p-4 text-[14.5px] leading-relaxed text-foreground/85">
-      {JSON.stringify(data, null, 2)}
-    </pre>
+    <div className="relative">
+      <button
+        type="button"
+        onClick={copy}
+        className={cn(
+          "press sticky top-3 z-10 ml-auto mr-4 flex w-fit items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[12.5px] font-medium backdrop-blur",
+          copied
+            ? "border-primary/50 bg-primary/15 text-primary"
+            : "border-border bg-surface/90 text-muted-foreground hover:border-border-strong hover:text-foreground",
+        )}
+      >
+        {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? "Copied" : "Copy"}
+      </button>
+
+      <pre className="mono -mt-8 overflow-x-auto px-4 pb-6 pt-4 text-[13.5px] leading-[1.65]">
+        <code>
+          {lines.map((line, i) => (
+            <span key={i} className="group/line flex">
+              <span
+                aria-hidden
+                className="sticky left-0 mr-4 w-8 shrink-0 select-none bg-background text-right text-muted-foreground/35 tabular-nums transition-colors group-hover/line:text-muted-foreground/70"
+              >
+                {i + 1}
+              </span>
+              <span className="min-w-0 whitespace-pre">
+                {tokenizeLine(line).map((t, k) => (
+                  <span key={k} className={t.cls}>
+                    {t.text}
+                  </span>
+                ))}
+              </span>
+            </span>
+          ))}
+        </code>
+      </pre>
+    </div>
   );
 }
 
@@ -217,23 +339,25 @@ function PreviewBody({
   }
 
   const isSuccess =
-  status === 202 &&
-  isRecord(data) &&
-  typeof data.message === "string";
+    status === 202 && isRecord(data) && typeof data.message === "string";
 
   // Contact accepted
   if (isSuccess) {
     return (
       <div className="flex h-full items-center justify-center p-10">
-        <div className="max-w-md rounded-xl border border-green-500/30 bg-green-500/10 p-8 text-center">
-          <Check className="mx-auto mb-4 h-10 w-10 text-green-500" />
-
-          <h2 className="text-xl font-semibold text-foreground">
-            Message Sent Successfully
+        <div className="animate-pop relative max-w-md overflow-hidden rounded-2xl border border-status-2xx/30 bg-status-2xx/8 p-8 text-center elev-2">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -top-16 h-32 bg-status-2xx/20 blur-3xl"
+          />
+          <div className="relative mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-status-2xx/40 bg-status-2xx/15">
+            <Check className="h-7 w-7 text-status-2xx" />
+          </div>
+          <h2 className="relative text-xl font-semibold text-foreground">
+            Message sent successfully
           </h2>
-
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-            Thank you for reaching out! Your message has been received and I'll
+          <p className="relative mt-3 text-sm leading-relaxed text-muted-foreground">
+            Thank you for reaching out! Your message has been received and I&apos;ll
             get back to you as soon as possible.
           </p>
         </div>
@@ -242,19 +366,26 @@ function PreviewBody({
   }
 
   // Project[]
-  if (Array.isArray(data) && data.length > 0 && isRecord(data[0]) && "stack" in data[0]) {
+  if (
+    Array.isArray(data) &&
+    data.length > 0 &&
+    isRecord(data[0]) &&
+    "stack" in data[0]
+  ) {
     return (
       <div className="p-5">
-        <ProjectListPreview
-          projects={data as Project[]}
-          onOpen={onOpenProject}
-        />
+        <ProjectListPreview projects={data as Project[]} onOpen={onOpenProject} />
       </div>
     );
   }
 
   // Services[]
-  if (Array.isArray(data) && data.length > 0 && isRecord(data[0]) && "deliverables" in data[0]) {
+  if (
+    Array.isArray(data) &&
+    data.length > 0 &&
+    isRecord(data[0]) &&
+    "deliverables" in data[0]
+  ) {
     return (
       <div className="p-5">
         <ServicesView services={data as Service[]} onOpenProject={onOpenProject} />
@@ -275,15 +406,17 @@ function PreviewBody({
   if (isRecord(data) && "howToUse" in data && "tagline" in data) {
     return (
       <HomeView
-        data={data as {
-          name: string;
-          role: string;
-          photoUrl?: string;
-          status: string;
-          tagline: string;
-          stats?: { value: string; label: string }[];
-          howToUse: string[];
-        }}
+        data={
+          data as {
+            name: string;
+            role: string;
+            photoUrl?: string;
+            status: string;
+            tagline: string;
+            stats?: { value: string; label: string }[];
+            howToUse: string[];
+          }
+        }
         onNavigate={(url, method) => onSendRaw(url, method)}
       />
     );
@@ -310,23 +443,16 @@ function PreviewBody({
   }
 
   // Experience envelope shape: { experience }
-  if (isRecord(data) && "experience" in data && Array.isArray((data as Record<string, unknown>).experience)) {
+  if (
+    isRecord(data) &&
+    "experience" in data &&
+    Array.isArray((data as Record<string, unknown>).experience)
+  ) {
     return (
       <ExperienceView
-        experience={
-          (data as { experience: ExperienceItem[] }).experience
-        }
+        experience={(data as { experience: ExperienceItem[] }).experience}
       />
     );
-  }
-
-  // Contact form fallback: prompt to submit
-  if (
-    // If this rendered from picking POST /api/contact (before any submit), data may not match.
-    // Show a small compose form.
-    false
-  ) {
-    // handled by request tab body — see index route
   }
 
   return <PrettyJson data={data} />;
@@ -335,27 +461,42 @@ function PreviewBody({
 // -- helpers ---------------------------------------------------------------
 
 function ErrorCard({ status, data }: { status: number; data: unknown }) {
-  const tone =
-    status === 401 || status === 429 || status >= 500
-      ? "border-[color:var(--status-5xx)]/50 bg-[color:var(--status-5xx)]/10 text-[color:var(--status-5xx)]"
-      : "border-[color:var(--status-4xx)]/50 bg-[color:var(--status-4xx)]/10 text-[color:var(--status-4xx)]";
+  const severe = status === 401 || status === 429 || status >= 500;
+  const accent = severe ? "var(--status-5xx)" : "var(--status-4xx)";
   const message =
     (isRecord(data) && typeof data.error === "string" ? data.error : null) ??
     "Something went wrong.";
-  const Icon =
-    status === 401 || status === 429 ? ShieldAlert : AlertTriangle;
+  const Icon = status === 401 || status === 429 ? ShieldAlert : AlertTriangle;
 
   return (
     <div className="p-6">
       <div
-        className={cn(
-          "flex items-start gap-4 rounded-xl border-l-4 border bg-surface p-5",
-          tone,
-        )}
+        className="animate-pop relative flex items-start gap-4 overflow-hidden rounded-xl border bg-surface p-5 elev-2"
+        style={{
+          borderColor: `color-mix(in oklab, ${accent} 45%, transparent)`,
+        }}
       >
-        <Icon className="mt-0.5 h-5 w-5 shrink-0" />
-        <div className="min-w-0">
-          <div className="mono text-[13px] uppercase tracking-widest">
+        {/* Thick status-coloured spine plus a soft bleed of the same hue --
+            an error should be unmistakable at a glance, not just tinted. */}
+        <span
+          aria-hidden
+          className="absolute inset-y-0 left-0 w-1"
+          style={{ background: accent }}
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -left-10 top-1/2 h-32 w-32 -translate-y-1/2 rounded-full blur-3xl"
+          style={{ background: `color-mix(in oklab, ${accent} 25%, transparent)` }}
+        />
+        <Icon
+          className="relative mt-0.5 h-5 w-5 shrink-0"
+          style={{ color: accent }}
+        />
+        <div className="relative min-w-0">
+          <div
+            className="mono text-[13px] uppercase tracking-widest"
+            style={{ color: accent }}
+          >
             {status} error
           </div>
           <p className="mt-1 text-base text-foreground">{message}</p>
@@ -383,7 +524,6 @@ type ProfileShape = {
   interests?: string[];
 };
 
-
 const skillCategoryIcons: Record<string, LucideIcon> = {
   frontend: Layout,
   backend: Server,
@@ -395,10 +535,10 @@ const skillCategoryIcons: Record<string, LucideIcon> = {
 };
 
 const skillCategoryAccents = [
-  "border-l-[color:var(--primary)]",
-  "border-l-[color:var(--method-post)]",
-  "border-l-[color:var(--status-2xx)]",
-  "border-l-[color:var(--method-get)]",
+  "var(--primary)",
+  "var(--method-post)",
+  "var(--cyan-accent)",
+  "var(--status-2xx)",
 ];
 
 function SkillsGrid({
@@ -410,32 +550,42 @@ function SkillsGrid({
     <div className="grid gap-4 p-5 md:grid-cols-2">
       {categories.map((cat, i) => {
         const Icon = skillCategoryIcons[cat.id] ?? Wrench;
-        const accent = skillCategoryAccents[i % skillCategoryAccents.length];
+        const accent = skillCategoryAccents[i % skillCategoryAccents.length]!;
         return (
           <div
             key={cat.id}
-            className={cn(
-              "animate-in fade-in slide-in-from-bottom-1 rounded-xl border border-border border-l-2 bg-card p-4 duration-500 [animation-fill-mode:backwards]",
-              accent,
-            )}
-            style={{ animationDelay: `${i * 60}ms` }}
+            className="spotlight group animate-fade-up rounded-xl border border-border border-l-2 bg-card p-4 transition-[transform,box-shadow,border-color] duration-300 ease-(--e-out-quart) hover:-translate-y-0.5 hover:elev-2"
+            style={{
+              animationDelay: `${i * 60}ms`,
+              borderLeftColor: accent,
+            }}
           >
-            <div className="mb-3 flex items-center justify-between">
+            <span aria-hidden className="spotlight-layer" />
+            <div className="relative mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Icon className="h-4 w-4 text-primary" />
+                <span
+                  className="flex h-7 w-7 items-center justify-center rounded-md transition-transform duration-300 ease-(--e-spring) group-hover:scale-110"
+                  style={{
+                    background: `color-mix(in oklab, ${accent} 14%, transparent)`,
+                    color: accent,
+                  }}
+                >
+                  <Icon className="h-4 w-4" />
+                </span>
                 <h3 className="text-base font-semibold text-foreground">
                   {cat.label}
                 </h3>
               </div>
-              <span className="mono text-[12px] uppercase tracking-widest text-muted-foreground">
+              <span className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground">
                 {cat.items.length}
               </span>
             </div>
-            <div className="flex flex-wrap gap-1.5">
-              {cat.items.map((s) => (
+            <div className="relative flex flex-wrap gap-1.5">
+              {cat.items.map((s, k) => (
                 <span
                   key={s}
-                  className="mono rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[13.5px] text-foreground/85 transition-colors hover:border-ring hover:text-foreground"
+                  className="mono animate-fade-up cursor-default rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[13px] text-foreground/85 transition-[transform,color,border-color,background-color] duration-200 ease-(--e-out-quart) hover:-translate-y-0.5 hover:border-ring hover:bg-surface-3 hover:text-foreground"
+                  style={{ animationDelay: `${i * 60 + 120 + k * 25}ms` }}
                 >
                   {s}
                 </span>
@@ -467,12 +617,13 @@ function roleIcon(role: string): LucideIcon {
 function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
   return (
     <div className="space-y-5 p-5">
-
-      <ol className="relative space-y-3 border-l border-border pl-5">
+      <ol className="relative space-y-3 pl-6">
+        {/* The spine draws itself downward once, so the timeline reads as
+            being traced rather than simply appearing. */}
         <span
           aria-hidden
-          className="absolute -left-px top-0 w-px origin-top animate-in fade-in bg-gradient-to-b from-primary/60 to-transparent duration-700"
-          style={{ height: "100%" }}
+          className="absolute bottom-0 left-0 top-1 w-px origin-top bg-linear-to-b from-primary/70 via-border to-transparent"
+          style={{ animation: "scale-y-in 900ms var(--e-out-expo) both" }}
         />
         {experience.map((e, i) => {
           const isActive = /present/i.test(e.period);
@@ -480,24 +631,28 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
           return (
             <li
               key={i}
-              className="relative animate-in fade-in slide-in-from-left-2 duration-500 [animation-fill-mode:backwards]"
-              style={{ animationDelay: `${150 + i * 90}ms` }}
+              className="animate-fade-up relative"
+              style={{ animationDelay: `${180 + i * 90}ms` }}
             >
               <span
+                aria-hidden
                 className={cn(
-                  "absolute -left-[27px] top-2 h-2 w-2 rounded-full ring-4 ring-background",
-                  isActive ? "bg-primary animate-pulse" : "bg-border-strong",
+                  "absolute -left-6 top-4 h-2.5 w-2.5 -translate-x-1/2 rounded-full ring-4 ring-background",
+                  isActive ? "animate-pulse-glow bg-primary" : "bg-border-strong",
                 )}
               />
               <div
                 className={cn(
-                  "rounded-xl border bg-card p-4",
-                  isActive ? "border-primary/40" : "border-border",
+                  "spotlight group rounded-xl border bg-card p-4 transition-[transform,box-shadow,border-color] duration-300 ease-(--e-out-quart) hover:-translate-y-0.5 hover:elev-2",
+                  isActive
+                    ? "border-primary/40"
+                    : "border-border hover:border-border-strong",
                 )}
               >
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <span aria-hidden className="spotlight-layer" />
+                <div className="relative flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="flex items-center gap-1.5 text-base font-semibold text-foreground">
-                    <Icon className="h-3.5 w-3.5 text-primary" />
+                    <Icon className="h-3.5 w-3.5 text-primary transition-transform duration-300 ease-(--e-spring) group-hover:scale-115" />
                     {e.role}
                     {isActive && (
                       <span className="mono ml-1 rounded-full border border-primary/40 bg-primary/10 px-1.5 py-0.5 text-[11px] uppercase tracking-wider text-primary">
@@ -509,8 +664,8 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
                     {e.period}
                   </span>
                 </div>
-                <div className="text-sm text-primary">{e.org}</div>
-                <ul className="mt-2 space-y-1.5">
+                <div className="relative text-sm text-primary">{e.org}</div>
+                <ul className="relative mt-2 space-y-1.5">
                   {e.bullets.map((b, k) => (
                     <li
                       key={k}
@@ -518,7 +673,7 @@ function ExperienceView({ experience }: { experience: ExperienceItem[] }) {
                     >
                       <span
                         aria-hidden
-                        className="absolute left-0 top-[0.55rem] h-1.5 w-1.5 rounded-full bg-primary/60"
+                        className="absolute left-0 top-[0.55rem] h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary"
                       />
                       {b}
                     </li>
@@ -568,7 +723,7 @@ export function ContactCompose({
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
+            className={inputClass}
           />
         </Field>
         <Field label="email">
@@ -577,7 +732,7 @@ export function ContactCompose({
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
+            className={inputClass}
           />
         </Field>
       </div>
@@ -587,22 +742,33 @@ export function ContactCompose({
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full rounded-md border border-border bg-input px-3 py-2 text-base outline-none focus:border-ring"
+          className={cn(inputClass, "resize-y")}
         />
       </Field>
       <div>
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-70"
+          className={cn(
+            "press group relative inline-flex items-center gap-2 overflow-hidden rounded-md px-4 py-2 text-sm font-semibold",
+            "bg-linear-to-b from-[color-mix(in_oklab,var(--primary)_92%,white)] to-primary text-primary-foreground",
+            "shadow-(--glow-primary) hover:brightness-110 disabled:opacity-70",
+          )}
         >
-          {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+          {loading ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Send className="h-3.5 w-3.5 transition-transform duration-200 ease-(--e-out-quart) group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          )}
           Send message (POST)
         </button>
       </div>
     </form>
   );
 }
+
+const inputClass =
+  "w-full rounded-md border border-border bg-input px-3 py-2 text-base text-foreground outline-none transition-[border-color,box-shadow] duration-200 ease-(--e-out-quart) focus:border-ring focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--ring)_18%,transparent)]";
 
 function Field({
   label,

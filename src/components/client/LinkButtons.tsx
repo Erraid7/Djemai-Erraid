@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 
 type Kind = "live" | "github" | "demoVideo";
 
-const LABELS: Record<Kind, { label: string; icon: React.ComponentType<{ className?: string }> }> = {
+const LABELS: Record<
+  Kind,
+  { label: string; icon: React.ComponentType<{ className?: string }> }
+> = {
   live: { label: "Live site", icon: ExternalLink },
   github: { label: "Source", icon: Github },
   demoVideo: { label: "Watch demo", icon: PlayCircle },
@@ -26,13 +29,16 @@ export function LinkButtons({ links }: { links: Project["links"] }) {
               target="_blank"
               rel="noreferrer noopener"
               className={cn(
-                "group inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm font-medium text-foreground",
-                "transition-colors hover:border-ring hover:bg-surface-3",
+                "press group inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm font-medium text-foreground",
+                "hover:-translate-y-0.5 hover:border-primary/50 hover:bg-surface-3 hover:shadow-(--glow-primary)",
               )}
             >
-              <Icon className="h-3.5 w-3.5 text-primary" />
+              <Icon className="h-3.5 w-3.5 text-primary transition-transform duration-300 ease-(--e-spring) group-hover:scale-115" />
               {meta.label}
-              <span aria-hidden className="text-muted-foreground group-hover:text-foreground">
+              <span
+                aria-hidden
+                className="text-muted-foreground transition-transform duration-300 ease-(--e-out-expo) group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+              >
                 ↗
               </span>
             </a>
@@ -42,9 +48,7 @@ export function LinkButtons({ links }: { links: Project["links"] }) {
           <span
             key={k}
             title={entry.reason}
-            className={cn(
-              "inline-flex max-w-full items-start gap-2 rounded-md border border-dashed border-border bg-surface/40 px-3 py-1.5 text-sm text-muted-foreground",
-            )}
+            className="inline-flex max-w-full items-start gap-2 rounded-md border border-dashed border-border bg-surface/40 px-3 py-1.5 text-sm text-muted-foreground"
           >
             <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>

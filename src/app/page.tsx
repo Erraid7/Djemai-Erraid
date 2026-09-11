@@ -10,9 +10,9 @@ import { RequestTabBody } from "@/components/client/RequestTabBody";
 import { ExpandedPreviewModal } from "@/components/client/ExpandedPreviewModal";
 import { TestsStrip } from "@/components/client/TestsStrip";
 import { BootSequence } from "@/components/client/BootSequence";
+import { ImagePreloader } from "@/components/client/ImagePreloader";
 import { useApiClient, type HttpMethod } from "@/hooks/useApiClient";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { profile } from "@/lib/seed/profile";
 
@@ -43,8 +43,7 @@ export default function Home() {
   );
 
   const currentProjectId =
-    isProjectResponse &&
-    (response!.data as { id?: number }).id !== undefined
+    isProjectResponse && (response!.data as { id?: number }).id !== undefined
       ? (response!.data as { id: number }).id
       : null;
 
@@ -86,10 +85,24 @@ export default function Home() {
   }
 
   const showTests = !!response?.tests && response.tests.length > 0;
+  // Endpoints whose Body tab holds a real composer worth pointing at.
+  const hasBodyComposer =
+    method === "POST" &&
+    (url.startsWith("/api/contact") || url.startsWith("/api/auth/login"));
 
   return (
-    <div className="grid h-screen w-full grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="relative grid h-screen w-full grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr]">
+      {/* Ambient shell. Fixed and behind everything, so panels read as layers
+          floating over a lit space rather than as one flat dark fill. */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <div className="app-vignette absolute inset-0" />
+        <div className="app-grid absolute inset-0" />
+        <div className="app-grain absolute inset-0" />
+      </div>
+
       <BootSequence />
+      <ImagePreloader />
+
       <div className="hidden min-h-0 md:block">
         <Sidebar currentUrl={url} currentMethod={method} onSelect={handleSelect} />
       </div>
@@ -97,27 +110,39 @@ export default function Home() {
       <main className="flex min-h-0 flex-col">
         <div className="flex items-center gap-2 border-b border-border bg-surface px-3 py-2 md:hidden">
           <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-            <Button
+            <button
               type="button"
-              variant="ghost"
-              size="icon"
               onClick={() => setMobileNavOpen(true)}
               aria-label="Open collections"
+              className="press inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface-2 text-foreground hover:border-border-strong hover:bg-surface-3"
             >
               <Menu className="h-5 w-5" />
-            </Button>
+            </button>
             <SheetContent side="left" className="w-72 p-0">
               <SheetTitle className="sr-only">Request collections</SheetTitle>
-              <Sidebar currentUrl={url} currentMethod={method} onSelect={handleSelect} />
+              <Sidebar
+                currentUrl={url}
+                currentMethod={method}
+                onSelect={handleSelect}
+              />
             </SheetContent>
           </Sheet>
-          <Avatar className="h-7 w-7 shrink-0 border border-border-strong">
-            <AvatarImage src={profile.photoUrl} alt={profile.name} />
-            <AvatarFallback className="mono text-[9px]">
-              {profile.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
-            </AvatarFallback>
-          </Avatar>
-          <span className="mono text-sm text-foreground">erraid.api</span>
+
+          <div className="relative shrink-0">
+            <Avatar className="h-7 w-7 border border-border-strong">
+              <AvatarImage src={profile.photoUrl} alt={profile.name} />
+              <AvatarFallback className="mono text-[9px]">
+                {profile.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
+              </AvatarFallback>
+            </Avatar>
+            <span
+              aria-hidden
+              className="absolute -bottom-px -right-px h-2.5 w-2.5 rounded-full border-2 border-surface bg-primary"
+            />
+          </div>
+          <span className="mono bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-sm text-transparent">
+            erraid.api
+          </span>
         </div>
 
         <RequestBar
@@ -129,7 +154,7 @@ export default function Home() {
           onSend={handleSend}
         />
 
-        <TabBar active={tab} onChange={setTab} />
+        <TabBar active={tab} onChange={setTab} bodyHint={hasBodyComposer} />
 
         <RequestTabBody
           tab={tab}
@@ -138,7 +163,9 @@ export default function Home() {
           response={response}
           loading={loading}
           onSubmitContact={(payload) => void send("/api/contact", "POST", payload)}
-          onLoginPoke={(credentials) => void send("/api/auth/login", "POST", credentials)}
+          onLoginPoke={(credentials) =>
+            void send("/api/auth/login", "POST", credentials)
+          }
         />
 
         <ResponsePanel
@@ -160,7 +187,8 @@ export default function Home() {
         canNavigate={canNavigateModal}
         onNavigate={(offset) => {
           if (currentProjectId === null) return;
-          const ids = lastProjectsListIds.length > 0 ? lastProjectsListIds : [1, 2, 3, 4, 5];
+          const ids =
+            lastProjectsListIds.length > 0 ? lastProjectsListIds : [1, 2, 3, 4, 5];
           const idx = ids.indexOf(currentProjectId);
           const nextIdx = idx === -1 ? 0 : (idx + offset + ids.length) % ids.length;
           const nextId = ids[nextIdx]!;

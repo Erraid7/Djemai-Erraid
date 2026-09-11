@@ -1,8 +1,15 @@
+"use client";
+
 import { useMemo, useState } from "react";
+import { KeyRound } from "lucide-react";
 import type { RequestTab } from "./TabBar";
 import type { HttpMethod } from "@/hooks/useApiClient";
 import { ContactCompose } from "./ResponsePanel";
 import type { ApiEnvelope, Project } from "@/lib/types";
+import { cn } from "@/lib/utils";
+
+const fieldClass =
+  "w-full rounded-md border border-border bg-input px-3 py-2 text-base text-foreground outline-none transition-[border-color,box-shadow] duration-200 ease-(--e-out-quart) focus:border-ring focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--ring)_18%,transparent)]";
 
 export function RequestTabBody({
   tab,
@@ -18,7 +25,11 @@ export function RequestTabBody({
   url: string;
   response: ApiEnvelope<unknown> | null;
   loading: boolean;
-  onSubmitContact: (payload: { name: string; email: string; message: string }) => void;
+  onSubmitContact: (payload: {
+    name: string;
+    email: string;
+    message: string;
+  }) => void;
   onLoginPoke: (credentials: { email: string; password: string }) => void;
 }) {
   const params = useMemo(() => extractPathParams(url), [url]);
@@ -27,21 +38,25 @@ export function RequestTabBody({
 
   return (
     <div className="border-b border-border bg-background px-4 py-4">
-      {tab === "params" ? (
-        <ParamsView params={params} />
-      ) : tab === "headers" ? (
-        <HeadersView method={method} />
-      ) : tab === "body" ? (
-        isContact ? (
-          <ContactCompose onSubmit={onSubmitContact} loading={loading} />
-        ) : isLogin ? (
-          <LoginPoke onSubmit={onLoginPoke} loading={loading} />
+      {/* Keyed on the tab so switching cross-fades the panel instead of
+          snapping between two different content heights. */}
+      <div key={tab} className="animate-fade-up">
+        {tab === "params" ? (
+          <ParamsView params={params} />
+        ) : tab === "headers" ? (
+          <HeadersView method={method} />
+        ) : tab === "body" ? (
+          isContact ? (
+            <ContactCompose onSubmit={onSubmitContact} loading={loading} />
+          ) : isLogin ? (
+            <LoginPoke onSubmit={onLoginPoke} loading={loading} />
+          ) : (
+            <EmptyBody method={method} />
+          )
         ) : (
-          <EmptyBody method={method} />
-        )
-      ) : (
-        <DocsView response={response} url={url} />
-      )}
+          <DocsView response={response} url={url} />
+        )}
+      </div>
     </div>
   );
 }
@@ -51,7 +66,10 @@ function ParamsView({ params }: { params: { key: string; value: string }[] }) {
     return (
       <p className="text-sm text-muted-foreground">
         No path parameters in this URL. Try{" "}
-        <code className="mono text-foreground">/api/projects/1</code>.
+        <code className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-foreground">
+          /api/projects/1
+        </code>
+        .
       </p>
     );
   }
@@ -66,7 +84,10 @@ function ParamsView({ params }: { params: { key: string; value: string }[] }) {
         </thead>
         <tbody>
           {params.map((p) => (
-            <tr key={p.key} className="border-t border-border">
+            <tr
+              key={p.key}
+              className="border-t border-border transition-colors hover:bg-surface/60"
+            >
               <td className="mono px-3 py-1.5 text-primary">{p.key}</td>
               <td className="mono px-3 py-1.5 text-foreground/85">{p.value}</td>
             </tr>
@@ -90,7 +111,10 @@ function HeadersView({ method }: { method: HttpMethod }) {
       <table className="w-full text-base">
         <tbody>
           {headers.map((h) => (
-            <tr key={h.key} className="border-t border-border first:border-t-0">
+            <tr
+              key={h.key}
+              className="border-t border-border transition-colors first:border-t-0 hover:bg-surface/60"
+            >
               <td className="mono w-1/3 bg-surface px-3 py-1.5 text-muted-foreground">
                 {h.key}
               </td>
@@ -141,7 +165,7 @@ function LoginPoke({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
+            className={fieldClass}
           />
         </label>
         <label className="block">
@@ -153,11 +177,11 @@ function LoginPoke({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full rounded-md border border-border bg-input px-3 py-1.5 text-base outline-none focus:border-ring"
+            className={fieldClass}
           />
         </label>
       </div>
-      <p className="text-sm text-muted-foreground">
+      <p className="rounded-md border border-dashed border-border bg-surface/50 px-3 py-2 text-sm text-muted-foreground">
         Spoiler: I won&apos;t authenticate you anyway — this route is real, but
         no combination of these fields gets you in. Send it and see what comes
         back.
@@ -166,8 +190,12 @@ function LoginPoke({
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-sm font-medium text-foreground hover:border-ring disabled:opacity-70"
+          className={cn(
+            "press group inline-flex items-center gap-2 rounded-md border border-border bg-surface-2 px-3 py-2 text-sm font-medium text-foreground",
+            "hover:border-method-post/50 hover:bg-surface-3 disabled:opacity-70",
+          )}
         >
+          <KeyRound className="h-3.5 w-3.5 text-method-post transition-transform duration-300 ease-(--e-spring) group-hover:rotate-12" />
           Try to log in
         </button>
       </div>
@@ -192,7 +220,7 @@ function DocsView({
 
   if (project) {
     return (
-      <article className="prose-portfolio mono max-w-none whitespace-pre-wrap text-[15px] leading-relaxed text-foreground/85">
+      <article className="max-h-72 overflow-y-auto whitespace-pre-wrap pr-2 text-[15px] leading-relaxed text-foreground/85">
         {project.docsMarkdown}
       </article>
     );
@@ -205,12 +233,12 @@ function DocsView({
       </p>
       <p>
         Try firing{" "}
-        <span className="mono text-foreground">GET /api/projects/1</span> and
-        switch back here.
+        <code className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-foreground">
+          GET /api/projects/1
+        </code>{" "}
+        and switch back here.
       </p>
-      <p className="mono text-[13px] text-muted-foreground/70">
-        current: {url}
-      </p>
+      <p className="mono text-[13px] text-muted-foreground/70">current: {url}</p>
     </div>
   );
 }

@@ -8,14 +8,6 @@ import {
   Check,
   Copy,
   Loader2,
-  Layout,
-  Server,
-  Database,
-  Smartphone,
-  Bot,
-  Palette,
-  TestTube,
-  Wrench,
   Crown,
   Code2,
   GraduationCap,
@@ -24,6 +16,7 @@ import {
   Clock,
   HardDrive,
   MousePointerClick,
+  SearchX,
   type LucideIcon,
 } from "lucide-react";
 import type { ApiEnvelope, Project } from "@/lib/types";
@@ -31,6 +24,7 @@ import { StatusBadge } from "./badges";
 import { ProjectPreview } from "./ProjectPreview";
 import { ProjectListPreview } from "./ProjectListPreview";
 import { ServicesView } from "./ServicesView";
+import { SkillsView, type SkillCategoryData } from "./SkillsView";
 import type { Service } from "@/lib/seed/services";
 import { HomeView } from "./HomeView";
 import { AboutView } from "./AboutView";
@@ -209,6 +203,29 @@ function ModeButton({
   );
 }
 
+function NoResults() {
+  return (
+    <div className="flex h-full items-center justify-center p-10 text-center">
+      <div className="animate-fade-up">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-dashed border-border bg-surface-2 text-muted-foreground">
+          <SearchX className="h-5 w-5" />
+        </div>
+        <div className="mono text-sm uppercase tracking-widest text-muted-foreground">
+          200 · empty
+        </div>
+        <p className="mt-2 max-w-md text-base text-muted-foreground">
+          The request succeeded — there just isn&apos;t anything matching it.
+          Try a different filter, or fire{" "}
+          <code className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-foreground">
+            GET /api/projects
+          </code>{" "}
+          for everything.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function EmptyState({ method }: { method: HttpMethod }) {
   return (
     <div className="flex h-full items-center justify-center p-10 text-center">
@@ -365,6 +382,12 @@ function PreviewBody({
     );
   }
 
+  // An empty list is a real, reachable outcome (e.g. ?stack=cobol) and should
+  // not fall through to a bare "[]" dump.
+  if (Array.isArray(data) && data.length === 0) {
+    return <NoResults />;
+  }
+
   // Project[]
   if (
     Array.isArray(data) &&
@@ -436,8 +459,11 @@ function PreviewBody({
     "label" in data[0]
   ) {
     return (
-      <SkillsGrid
-        categories={data as { id: string; label: string; items: string[] }[]}
+      <SkillsView
+        categories={data as SkillCategoryData[]}
+        onFilterByStack={(stack) =>
+          onSendRaw(`/api/projects?stack=${encodeURIComponent(stack)}`, "GET")
+        }
       />
     );
   }
@@ -523,80 +549,6 @@ type ProfileShape = {
   journey?: string[];
   interests?: string[];
 };
-
-const skillCategoryIcons: Record<string, LucideIcon> = {
-  frontend: Layout,
-  backend: Server,
-  database: Database,
-  mobile: Smartphone,
-  ai: Bot,
-  design: Palette,
-  devops: TestTube,
-};
-
-const skillCategoryAccents = [
-  "var(--primary)",
-  "var(--method-post)",
-  "var(--cyan-accent)",
-  "var(--status-2xx)",
-];
-
-function SkillsGrid({
-  categories,
-}: {
-  categories: { id: string; label: string; items: string[] }[];
-}) {
-  return (
-    <div className="grid gap-4 p-5 md:grid-cols-2">
-      {categories.map((cat, i) => {
-        const Icon = skillCategoryIcons[cat.id] ?? Wrench;
-        const accent = skillCategoryAccents[i % skillCategoryAccents.length]!;
-        return (
-          <div
-            key={cat.id}
-            className="spotlight group animate-fade-up rounded-xl border border-border border-l-2 bg-card p-4 transition-[transform,box-shadow,border-color] duration-300 ease-(--e-out-quart) hover:-translate-y-0.5 hover:elev-2"
-            style={{
-              animationDelay: `${i * 60}ms`,
-              borderLeftColor: accent,
-            }}
-          >
-            <span aria-hidden className="spotlight-layer" />
-            <div className="relative mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span
-                  className="flex h-7 w-7 items-center justify-center rounded-md transition-transform duration-300 ease-(--e-spring) group-hover:scale-110"
-                  style={{
-                    background: `color-mix(in oklab, ${accent} 14%, transparent)`,
-                    color: accent,
-                  }}
-                >
-                  <Icon className="h-4 w-4" />
-                </span>
-                <h3 className="text-base font-semibold text-foreground">
-                  {cat.label}
-                </h3>
-              </div>
-              <span className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground">
-                {cat.items.length}
-              </span>
-            </div>
-            <div className="relative flex flex-wrap gap-1.5">
-              {cat.items.map((s, k) => (
-                <span
-                  key={s}
-                  className="mono animate-fade-up cursor-default rounded-md border border-border bg-surface-2 px-2 py-0.5 text-[13px] text-foreground/85 transition-[transform,color,border-color,background-color] duration-200 ease-(--e-out-quart) hover:-translate-y-0.5 hover:border-ring hover:bg-surface-3 hover:text-foreground"
-                  style={{ animationDelay: `${i * 60 + 120 + k * 25}ms` }}
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 type ExperienceItem = {
   role: string;

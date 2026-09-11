@@ -74,7 +74,7 @@ export function useApiClient(): ApiClientState {
       // arrow navigation can iterate through the full list (pinned + hidden).
       if (
         targetMethod === "GET" &&
-        /^\/api\/projects\/?$/.test(targetUrl) &&
+        /^\/api\/projects\/?(\?.*)?$/.test(targetUrl) &&
         Array.isArray(enriched.data)
       ) {
         const ids = (enriched.data as Array<{ id?: number }>)

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { Menu } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Menu, Search } from "lucide-react";
 import { Sidebar } from "@/components/client/Sidebar";
 import { RequestBar } from "@/components/client/RequestBar";
 import { TabBar, type RequestTab } from "@/components/client/TabBar";
@@ -11,7 +11,11 @@ import { ExpandedPreviewModal } from "@/components/client/ExpandedPreviewModal";
 import { TestsStrip } from "@/components/client/TestsStrip";
 import { BootSequence } from "@/components/client/BootSequence";
 import { ImagePreloader } from "@/components/client/ImagePreloader";
+import { CommandPalette } from "@/components/client/CommandPalette";
+import { DiscoveryToast } from "@/components/client/DiscoveryToast";
 import { useApiClient, type HttpMethod } from "@/hooks/useApiClient";
+import { useDiscovery } from "@/hooks/useDiscovery";
+import { formatHash, parseHash } from "@/hooks/useHashRoute";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { profile } from "@/lib/seed/profile";
@@ -21,15 +25,76 @@ export default function Home() {
   const { method, url, response, loading, lastProjectsListIds, setMethod, setUrl, send } =
     client;
 
+  const discovery = useDiscovery();
+  const { record } = discovery;
+
   const [tab, setTab] = useState<RequestTab>("params");
   const [modalOpen, setModalOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
-  // Fire the initial /api/home request on mount so the panel isn't empty.
+  // Set while navigation originated from the hash (back/forward, or a pasted
+  // deep link) so the resulting request doesn't push a duplicate entry.
+  const fromHash = useRef(false);
+  const hashInitialised = useRef(false);
+
+  const syncHash = useCallback((m: HttpMethod, u: string) => {
+    const desired = formatHash(m, u);
+    if (window.location.hash === desired) return;
+    if (fromHash.current) {
+      fromHash.current = false;
+      return;
+    }
+    if (!hashInitialised.current) {
+      hashInitialised.current = true;
+      window.history.replaceState(null, "", desired);
+      return;
+    }
+    window.history.pushState(null, "", desired);
+  }, []);
+
+  /**
+   * Single funnel for every request in the app. Everything that fires a
+   * request goes through here so discovery tracking and deep-link syncing
+   * can't be forgotten at one of the many call sites.
+   */
+  const run = useCallback(
+    async (u: string, m: HttpMethod, body?: unknown) => {
+      const result = await send(u, m, body);
+      if (result) {
+        record(m, u, result.status);
+        syncHash(m, u);
+      }
+      return result;
+    },
+    [send, record, syncHash],
+  );
+
+  // Boot into whatever the hash asks for, falling back to home.
   useEffect(() => {
-    void send("/api/home", "GET");
+    const initial = parseHash(window.location.hash);
+    if (initial) {
+      hashInitialised.current = true;
+      fromHash.current = true;
+      void run(initial.url, initial.method);
+    } else {
+      void run("/api/home", "GET");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Browser back/forward.
+  useEffect(() => {
+    function onPop() {
+      const route = parseHash(window.location.hash);
+      if (!route) return;
+      fromHash.current = true;
+      setTab("params");
+      void run(route.url, route.method);
+    }
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [run]);
 
   const isProjectResponse = useMemo(
     () =>
@@ -60,14 +125,16 @@ export default function Home() {
       setMethod(m);
       setUrl(u);
       setTab("body");
+      syncHash(m, u);
       return;
     }
     if (m === "GET") {
-      await send(u, m);
+      await run(u, m);
     } else {
       setMethod(m);
       setUrl(u);
       setTab("body");
+      syncHash(m, u);
     }
   }
 
@@ -77,11 +144,7 @@ export default function Home() {
       setTab("body");
       return;
     }
-    if (method === "POST" && url.startsWith("/api/auth/login")) {
-      await send(url, "POST");
-      return;
-    }
-    await send(url, method);
+    await run(url, method);
   }
 
   const showTests = !!response?.tests && response.tests.length > 0;
@@ -104,7 +167,15 @@ export default function Home() {
       <ImagePreloader />
 
       <div className="hidden min-h-0 md:block">
-        <Sidebar currentUrl={url} currentMethod={method} onSelect={handleSelect} />
+        <Sidebar
+          currentUrl={url}
+          currentMethod={method}
+          onSelect={handleSelect}
+          secretsFound={discovery.secretsFound}
+          discoveredCount={discovery.count}
+          discoveredTotal={discovery.total}
+          onOpenPalette={() => setPaletteOpen(true)}
+        />
       </div>
 
       <main className="flex min-h-0 flex-col">
@@ -124,6 +195,9 @@ export default function Home() {
                 currentUrl={url}
                 currentMethod={method}
                 onSelect={handleSelect}
+                secretsFound={discovery.secretsFound}
+                discoveredCount={discovery.count}
+                discoveredTotal={discovery.total}
               />
             </SheetContent>
           </Sheet>
@@ -142,6 +216,18 @@ export default function Home() {
           </div>
           <span className="mono bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-sm text-transparent">
             erraid.api
+          </span>
+
+          <button
+            type="button"
+            onClick={() => setPaletteOpen(true)}
+            aria-label="Search everything"
+            className="press ml-auto inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface-2 text-muted-foreground hover:border-border-strong hover:text-foreground"
+          >
+            <Search className="h-4 w-4" />
+          </button>
+          <span className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-[10px] tabular-nums text-muted-foreground">
+            {discovery.count}/{discovery.total}
           </span>
         </div>
 
@@ -162,9 +248,9 @@ export default function Home() {
           url={url}
           response={response}
           loading={loading}
-          onSubmitContact={(payload) => void send("/api/contact", "POST", payload)}
+          onSubmitContact={(payload) => void run("/api/contact", "POST", payload)}
           onLoginPoke={(credentials) =>
-            void send("/api/auth/login", "POST", credentials)
+            void run("/api/auth/login", "POST", credentials)
           }
         />
 
@@ -172,9 +258,9 @@ export default function Home() {
           response={response}
           loading={loading}
           method={method}
-          onOpenProject={(id) => void send(`/api/projects/${id}`, "GET")}
+          onOpenProject={(id) => void run(`/api/projects/${id}`, "GET")}
           onExpand={() => setModalOpen(true)}
-          onSendRaw={(u, m, b) => void send(u, m, b)}
+          onSendRaw={(u, m, b) => void run(u, m, b)}
         />
 
         {showTests ? <TestsStrip tests={response!.tests} /> : null}
@@ -192,8 +278,24 @@ export default function Home() {
           const idx = ids.indexOf(currentProjectId);
           const nextIdx = idx === -1 ? 0 : (idx + offset + ids.length) % ids.length;
           const nextId = ids[nextIdx]!;
-          void send(`/api/projects/${nextId}`, "GET");
+          void run(`/api/projects/${nextId}`, "GET");
         }}
+      />
+
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        onRun={(u, m) => {
+          setTab("params");
+          void run(u, m);
+        }}
+      />
+
+      <DiscoveryToast
+        endpoint={discovery.celebration}
+        found={discovery.count}
+        total={discovery.total}
+        onDismiss={discovery.dismissCelebration}
       />
     </div>
   );

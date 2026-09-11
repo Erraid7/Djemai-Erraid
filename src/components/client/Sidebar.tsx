@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Lock, ChevronDown, Terminal } from "lucide-react";
+import { Lock, ChevronDown, Terminal, Sparkles, Search } from "lucide-react";
 import { collections } from "@/lib/collections";
+import { keyOf, type DiscoverableEndpoint } from "@/lib/discovery";
 import { MethodBadge } from "./badges";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -12,10 +13,19 @@ export function Sidebar({
   currentUrl,
   currentMethod,
   onSelect,
+  secretsFound = [],
+  discoveredCount = 0,
+  discoveredTotal = 0,
+  onOpenPalette,
 }: {
   currentUrl: string;
   currentMethod: "GET" | "POST";
   onSelect: (method: "GET" | "POST", url: string, locked?: boolean) => void;
+  /** Unlisted endpoints this visitor has already found. */
+  secretsFound?: DiscoverableEndpoint[];
+  discoveredCount?: number;
+  discoveredTotal?: number;
+  onOpenPalette?: () => void;
 }) {
   const [projectsOpen, setProjectsOpen] = useState(false);
 
@@ -56,6 +66,20 @@ export function Sidebar({
             </div>
           </div>
         </div>
+
+        {onOpenPalette ? (
+          <button
+            type="button"
+            onClick={onOpenPalette}
+            className="press group mt-3 flex w-full items-center gap-2 rounded-lg border border-border bg-input px-2.5 py-2 text-left text-sm text-muted-foreground hover:border-border-strong hover:text-foreground"
+          >
+            <Search className="h-3.5 w-3.5" />
+            <span className="flex-1">Search everything…</span>
+            <kbd className="mono rounded border border-border bg-surface-2 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+              ⌘K
+            </kbd>
+          </button>
+        ) : null}
       </div>
 
       <nav className="relative flex-1 overflow-y-auto px-2 py-3">
@@ -235,18 +259,84 @@ export function Sidebar({
             </div>
           );
         })}
+
+        {secretsFound.length > 0 ? (
+          <div className="mb-3">
+            <div className="mono flex items-center gap-2 px-2 py-1 text-[12px] uppercase tracking-[0.2em] text-primary/80">
+              <Sparkles className="h-3 w-3" />
+              Discovered
+              <span
+                aria-hidden
+                className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent"
+              />
+            </div>
+            <ul className="mt-1 space-y-0.5">
+              {secretsFound.map((item) => {
+                const isActive =
+                  item.url === currentUrl && item.method === currentMethod;
+                return (
+                  <li key={keyOf(item.method, item.url)}>
+                    <button
+                      type="button"
+                      onClick={() => onSelect(item.method, item.url)}
+                      className={cn(
+                        "group flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left transition-colors duration-200",
+                        isActive ? "bg-surface-3" : "hover:bg-surface-2",
+                      )}
+                    >
+                      <MethodBadge
+                        method={item.method}
+                        className="w-11 shrink-0 text-right"
+                      />
+                      <Sparkles
+                        className={cn(
+                          "h-3.5 w-3.5 shrink-0 transition-colors",
+                          isActive ? "text-primary" : "text-primary/60",
+                        )}
+                      />
+                      <span className="mono truncate text-sm text-foreground/85 group-hover:text-foreground">
+                        {item.url}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : null}
       </nav>
 
       <div className="relative border-t border-border bg-background/40 px-4 py-3">
-        <div className="mono mb-1 text-[11px] uppercase tracking-[0.2em] text-primary/80">
-          Tip
-        </div>
-        <p className="text-[13px] leading-relaxed text-muted-foreground">
-          Try editing{" "}
-          <code className="mono rounded border border-border bg-surface-2 px-1 py-0.5 text-foreground">
-            /api/projects/7
-          </code>{" "}
-          in the URL bar — it isn&apos;t listed here.
+        {discoveredTotal > 0 ? (
+          <>
+            <div className="mono mb-1.5 flex items-center justify-between text-[11px] uppercase tracking-[0.18em]">
+              <span className="text-primary/80">Endpoints found</span>
+              <span className="tabular-nums text-muted-foreground">
+                {discoveredCount}/{discoveredTotal}
+              </span>
+            </div>
+            <div className="h-1 overflow-hidden rounded-full bg-surface-2">
+              <div
+                className="h-full rounded-full bg-linear-to-r from-primary/60 to-primary transition-[width] duration-700 ease-(--e-out-expo)"
+                style={{
+                  width: `${(discoveredCount / discoveredTotal) * 100}%`,
+                }}
+              />
+            </div>
+          </>
+        ) : null}
+        <p className="mt-2 text-[12.5px] leading-relaxed text-muted-foreground">
+          {discoveredCount >= discoveredTotal && discoveredTotal > 0 ? (
+            "Every route found. Nicely done."
+          ) : (
+            <>
+              Some routes aren&apos;t listed. Try editing{" "}
+              <code className="mono rounded border border-border bg-surface-2 px-1 py-0.5 text-foreground">
+                /api/projects/7
+              </code>{" "}
+              in the URL bar.
+            </>
+          )}
         </p>
       </div>
     </aside>

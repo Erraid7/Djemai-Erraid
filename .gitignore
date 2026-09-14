@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Private working notes -- they name clients, and this repo is public.
+portfolio_update_reference.md

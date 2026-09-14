@@ -1,30 +1,37 @@
-import { ExternalLink, Github, PlayCircle, Ban } from "lucide-react";
-import type { Project } from "@/lib/types";
+import { Ban, ExternalLink, Github, PlayCircle, Rocket } from "lucide-react";
+import type { Project, ProjectLink } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-type Kind = "live" | "github" | "demoVideo";
+type Icon = React.ComponentType<{ className?: string }>;
 
-const LABELS: Record<
-  Kind,
-  { label: string; icon: React.ComponentType<{ className?: string }> }
-> = {
-  live: { label: "Live site", icon: ExternalLink },
-  github: { label: "Source", icon: Github },
-  demoVideo: { label: "Watch demo", icon: PlayCircle },
-};
+type Slot = ProjectLink & { key: string; text: string; icon: Icon };
 
 export function LinkButtons({ links }: { links: Project["links"] }) {
-  const kinds: Kind[] = ["live", "github", "demoVideo"];
+  const slots: Slot[] = [
+    { key: "live", ...links.live, text: links.live.label ?? "Live site", icon: ExternalLink },
+    { key: "github", ...links.github, text: links.github.label ?? "Source", icon: Github },
+    {
+      key: "demoVideo",
+      ...links.demoVideo,
+      text: links.demoVideo.label ?? "Watch demo",
+      icon: PlayCircle,
+    },
+    // Project-specific extras, e.g. a second deployment of the same product.
+    ...(links.extra ?? []).map((l, i) => ({
+      key: `extra-${i}`,
+      ...l,
+      text: l.label,
+      icon: Rocket,
+    })),
+  ];
+
   return (
     <div className="flex flex-wrap gap-2">
-      {kinds.map((k) => {
-        const entry = links[k];
-        const meta = LABELS[k];
-        const Icon = meta.icon;
+      {slots.map(({ key, text, icon: Icon, ...entry }) => {
         if (entry.available && entry.url) {
           return (
             <a
-              key={k}
+              key={key}
               href={entry.url}
               target="_blank"
               rel="noreferrer noopener"
@@ -34,7 +41,7 @@ export function LinkButtons({ links }: { links: Project["links"] }) {
               )}
             >
               <Icon className="h-3.5 w-3.5 text-primary transition-transform duration-300 ease-(--e-spring) group-hover:scale-115" />
-              {meta.label}
+              {text}
               <span
                 aria-hidden
                 className="text-muted-foreground transition-transform duration-300 ease-(--e-out-expo) group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
@@ -46,15 +53,13 @@ export function LinkButtons({ links }: { links: Project["links"] }) {
         }
         return (
           <span
-            key={k}
+            key={key}
             title={entry.reason}
             className="inline-flex max-w-full items-start gap-2 rounded-md border border-dashed border-border bg-surface/40 px-3 py-1.5 text-sm text-muted-foreground"
           >
             <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
-              <span className="mr-1 font-medium text-foreground/70">
-                {meta.label}:
-              </span>
+              <span className="mr-1 font-medium text-foreground/70">{text}:</span>
               {entry.reason ?? "unavailable"}
             </span>
           </span>

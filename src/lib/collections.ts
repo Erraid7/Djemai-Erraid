@@ -27,6 +27,8 @@ export const collections: Collection[] = [
   },
   {
     label: "Projects",
+    // /api/projects/7 is deliberately absent -- it's the unlisted project the
+    // discovery game (src/lib/discovery.ts) rewards finding.
     items: [
       { method: "GET", url: "/api/projects", icon: FolderGit2 },
       { method: "GET", url: "/api/projects/1", icon: FolderGit2 },
@@ -35,6 +37,7 @@ export const collections: Collection[] = [
       { method: "GET", url: "/api/projects/4", icon: FolderGit2 },
       { method: "GET", url: "/api/projects/5", icon: FolderGit2 },
       { method: "GET", url: "/api/projects/6", icon: FolderGit2 },
+      { method: "GET", url: "/api/projects/8", icon: FolderGit2 },
     ],
   },
   {

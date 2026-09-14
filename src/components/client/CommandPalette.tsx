@@ -121,7 +121,8 @@ export function CommandPalette({
             </CommandGroup>
 
             <CommandGroup heading="Projects">
-              {projects.map((p) => (
+              {/* Unpinned projects are the discovery game's prize -- don't list them. */}
+              {projects.filter((p) => p.pinned).map((p) => (
                 <CommandItem
                   key={p.id}
                   value={`${p.name} ${p.role} ${p.stack.join(" ")} project`}

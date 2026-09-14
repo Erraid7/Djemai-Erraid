@@ -3,6 +3,7 @@
 import { ArrowRight, EyeOff, Pin } from "lucide-react";
 import type { Project } from "@/lib/types";
 import { spotlightMove } from "@/lib/spotlight";
+import { ProjectStatusBadge } from "./ProjectStatus";
 import { cn } from "@/lib/utils";
 
 export function ProjectListPreview({
@@ -65,6 +66,7 @@ export function ProjectListPreview({
                       <span className="text-base font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
                         {p.name}
                       </span>
+                      <ProjectStatusBadge status={p.status} size="sm" />
                       {p.pinned ? (
                         <Pin
                           className="h-3.5 w-3.5 text-primary/70 transition-transform duration-300 ease-(--e-spring) group-hover:rotate-12 group-hover:scale-110"

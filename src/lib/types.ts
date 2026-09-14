@@ -7,20 +7,50 @@ export type ProjectAvailability = {
   reason?: string;
 };
 
+/** One link slot. `label` overrides the default button text ("Live site", …). */
+export type ProjectLink = ProjectAvailability & { url?: string; label?: string };
+
+/** Link buttons beyond the three standard slots — these always need a label. */
+export type ExtraProjectLink = ProjectLink & { label: string };
+
+/**
+ * Where a project stands today. Drives the status badge and the home page's
+ * "live deployments" count, so keep it honest:
+ *   live           — in production at a public URL
+ *   demo           — a public demo is up; the full product is still being built
+ *   hosted-private — deployed and in use, but confidential (no public link)
+ *   internship     — an internship deliverable, owned by the client
+ *   completed      — finished and not hosted (CLI tools, desktop apps)
+ */
+export type ProjectStatusKind =
+  | "live"
+  | "demo"
+  | "hosted-private"
+  | "internship"
+  | "completed";
+
+export type ProjectStatus = { kind: ProjectStatusKind; label: string };
+
+/** A headline number shown large on the project page. Keep every one sourced. */
+export type ProjectMetric = { value: string; label: string };
+
 export type Project = {
   id: number;
   slug: string;
   name: string;
   role: string;
   pinned: boolean;
+  status: ProjectStatus;
   summary: string;
+  metrics?: ProjectMetric[];
   bullets: string[];
   stack: string[];
   media: MediaItem[];
   links: {
-    live: ProjectAvailability & { url?: string };
-    github: ProjectAvailability & { url?: string };
-    demoVideo: ProjectAvailability & { url?: string };
+    live: ProjectLink;
+    github: ProjectLink;
+    demoVideo: ProjectLink;
+    extra?: ExtraProjectLink[];
   };
   docsMarkdown: string;
 };

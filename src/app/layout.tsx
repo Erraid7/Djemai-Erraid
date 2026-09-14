@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 const SITE_URL = "https://djemai-erraid.vercel.app/";
 const NAME = "DJEMAI Mohamed Erraid";
 const DESCRIPTION =
-  "DJEMAI Mohamed Erraid -- full-stack developer and 4th-year Software Engineering (SIL) student at ESI Algiers. Portfolio built as a real API client: browse live projects like ESI Flow, Khatma, and PharmaFlow.";
+  "DJEMAI Mohamed Erraid -- freelance full-stack web developer and 4th-year Software Engineering (SIL) student at ESI Algiers. Portfolio built as a real API client: browse projects like ESI Flow, Khatma, and PharmaFlow.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -32,6 +32,8 @@ export const metadata: Metadata = {
     "DJEMAI Mohamed Erraid",
     "Erraid",
     "full-stack developer",
+    "freelance full-stack web developer",
+    "freelance web developer Algeria",
     "ESI Algiers",
     "software engineer portfolio",
     "Next.js developer Algeria",

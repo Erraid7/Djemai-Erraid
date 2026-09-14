@@ -20,7 +20,7 @@ export const whoami = {
 export const coffee = {
   error: "I'm a teapot. I can brew you a backend, not an espresso.",
   rfc: "RFC 2324, Hyper Text Coffee Pot Control Protocol",
-  accepts: ["tea", "code review", "internship offers"],
+  accepts: ["tea", "code review", "freelance projects"],
 };
 
 export const secret = {
@@ -31,6 +31,6 @@ export const secret = {
     "I build things I'll actually have to maintain. That's why this portfolio has real route handlers instead of a hardcoded JSON blob — it was the honest version of the idea.",
     "My favourite part of a project is the second pass, once it works and you finally get to make it good.",
   ],
-  stillLookingFor: "A summer 2026 internship on a team that ships real systems.",
+  openTo: "Freelance projects that need to keep working after the demo.",
   nextStep: "POST /api/contact — it actually sends me an email.",
 };

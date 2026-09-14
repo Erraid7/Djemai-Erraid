@@ -1,6 +1,17 @@
 import { profile } from "./profile";
+import { projects } from "./projects";
+import { skillCategories } from "./skills";
 
-// The Home response -- a short, centered welcome. Distinct on purpose from
+// Statuses that mean "running somewhere right now". hosted-private counts:
+// a confidential deployment is still a deployment, it just has no public link.
+const DEPLOYED = new Set(["live", "demo", "hosted-private"]);
+
+// Derived from the seed data instead of typed by hand, so the numbers on the
+// home page can't drift out of date when a project or skill is added.
+const deployedCount = projects.filter((p) => DEPLOYED.has(p.status.kind)).length;
+const skillCount = skillCategories.reduce((n, c) => n + c.items.length, 0);
+
+// The home response -- a short, centered welcome. Distinct on purpose from
 // the About response: this one orients a first-time visitor, About tells
 // the longer personal story.
 export const home = {
@@ -10,14 +21,14 @@ export const home = {
   status: `${profile.role} · ${profile.seeking}`,
   tagline:
     "This portfolio works like a real API client -- pick a request from the sidebar, hit Send, and the response renders as a real page instead of raw JSON.",
-  // Dev/technical stats -- kept honest and derivable from the actual seed
-  // data rather than vanity numbers. Update alongside projects.ts/skills.ts
-  // if those change.
   stats: [
-    { value: "7", label: "projects shipped" },
-    { value: "3", label: "live deployments" },
-    { value: "4", label: "platforms covered" },
-    { value: "32+", label: "technologies across the stack" },
+    { value: String(projects.length), label: "projects built" },
+    { value: String(deployedCount), label: "live deployments" },
+    // Not derivable from seed data. Counted as test cases in the two solo
+    // backends' repos (Khatma V1: 518, HamsyNet: 249) in Sept 2026, rounded
+    // down. Team projects are deliberately excluded.
+    { value: "750+", label: "automated tests in my solo backends" },
+    { value: String(skillCount), label: "technologies & practices" },
   ],
   howToUse: [
     "Pick a request from the sidebar on the left (or the menu on mobile).",

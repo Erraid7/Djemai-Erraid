@@ -7,12 +7,21 @@ type ExperienceEntry = {
 
 export const experience: ExperienceEntry[] = [
   {
-    role: "Freelance Full-Stack Developer",
+    role: "Freelance Full-Stack Web Developer",
     org: "Independent",
     period: "2025 -- Present",
     bullets: [
-      "Building production systems directly for clients end-to-end -- requirements, architecture, and deployment -- including PharmaFlow (a live, mobile-first pharmacy management platform) and HamsyNet (a confidential full-stack platform for a private organisation).",
-      "Working solo across the full stack: schema design, API design and auth, and the frontend clients that sit on top of them.",
+      "Building production systems directly for clients end-to-end -- requirements, architecture, and deployment -- including PharmaFlow (a live, mobile-first pharmacy coordination platform) and HamsyNet (a confidential Arabic mini-ERP for a private organisation).",
+      "Working solo across the full stack: schema design, APIs and auth, background jobs, and the frontends that sit on top of them.",
+    ],
+  },
+  {
+    role: "AI/Backend Engineering Intern",
+    org: "Alias Agency",
+    period: "07/2026 -- 09/2026",
+    bullets: [
+      "Co-built, in a two-intern team, a grounded multilingual (French/English/Arabic, including basic Darija) conversational assistant that turns plain-language trip requests into real, bookable tours for a client's tourism platform.",
+      "Designed hybrid retrieval -- database filters plus multilingual semantic re-ranking -- lifting precision@3 on vague requests from 20% to 46%, with guardrails that validate every recommendation against the live database.",
     ],
   },
   {

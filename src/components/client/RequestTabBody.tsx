@@ -5,6 +5,7 @@ import { KeyRound } from "lucide-react";
 import type { RequestTab } from "./TabBar";
 import type { HttpMethod } from "@/hooks/useApiClient";
 import { ContactCompose } from "./ResponsePanel";
+import { Markdown } from "./Markdown";
 import type { ApiEnvelope, Project } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -220,8 +221,8 @@ function DocsView({
 
   if (project) {
     return (
-      <article className="max-h-72 overflow-y-auto whitespace-pre-wrap pr-2 text-[15px] leading-relaxed text-foreground/85">
-        {project.docsMarkdown}
+      <article className="max-h-80 overflow-y-auto pr-2">
+        <Markdown source={project.docsMarkdown} />
       </article>
     );
   }

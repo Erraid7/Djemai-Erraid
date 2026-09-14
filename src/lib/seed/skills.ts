@@ -2,7 +2,7 @@
  * Skills, with an explicit proficiency level per item.
  *
  * A flat list of technology names can't answer the question a visitor
- * actually has -- "which of these does he *master*?" -- so every skill now
+ * actually has -- "which of these does he *master*?" -- so every skill
  * carries a `level`, and `/api/skills` cross-references each one against
  * `projects[].stack` to attach the real projects it shipped in. The project
  * evidence is objective and derived from data already in this repo; the level
@@ -57,14 +57,15 @@ export const skillCategories: SkillCategory[] = [
     label: "Backend",
     blurb: "APIs I designed, secured, and deployed myself.",
     items: [
-      { name: "Node.js", level: "core", aliases: ["Node", "Express", "Express.js"] },
+      // Express and Fastify both run on Node, so their projects count here too.
+      { name: "Node.js", level: "core", aliases: ["Node", "Express", "Express.js", "Fastify"] },
       { name: "Express.js", level: "core", aliases: ["Express"] },
       { name: "REST API design", level: "core" },
-      {
-        name: "JWT Authentication",
-        level: "core",
-        aliases: ["JWT", "JWT auth"],
-      },
+      { name: "JWT Authentication", level: "core", aliases: ["JWT", "JWT auth"] },
+      { name: "Fastify", level: "strong" },
+      { name: "Django", level: "strong" },
+      { name: "Django REST Framework", level: "strong", aliases: ["DRF"] },
+      { name: "BullMQ", level: "working" },
       { name: "Zod", level: "working" },
       { name: "OAuth", level: "working" },
     ],
@@ -77,28 +78,24 @@ export const skillCategories: SkillCategory[] = [
       { name: "PostgreSQL", level: "core", aliases: ["Postgres"] },
       { name: "Prisma ORM", level: "core", aliases: ["Prisma"] },
       { name: "SQL schema design", level: "core" },
+      { name: "Sequelize", level: "strong" },
+      { name: "Redis", level: "strong" },
       { name: "MongoDB", level: "strong", aliases: ["Mongo"] },
       { name: "Mongoose", level: "strong" },
+      { name: "pgvector", level: "working" },
       { name: "Firebase", level: "working" },
-    ],
-  },
-  {
-    id: "mobile",
-    label: "Mobile",
-    blurb: "Cross-platform, shipped end to end solo.",
-    items: [
-      { name: "Flutter", level: "strong" },
-      { name: "Dart", level: "strong" },
     ],
   },
   {
     id: "ai",
     label: "AI & Agents",
-    blurb: "Autonomous multi-agent pipelines, not API wrappers.",
+    blurb: "Grounded assistants and agent pipelines — and still learning.",
     items: [
       { name: "Python", level: "strong" },
       { name: "LLM APIs", level: "strong" },
       { name: "Multi-agent systems", level: "strong" },
+      { name: "Semantic search & RAG", level: "working", aliases: ["Semantic search", "RAG"] },
+      { name: "Ollama", level: "working" },
       { name: "Swarm intelligence", level: "working" },
     ],
   },
@@ -119,9 +116,11 @@ export const skillCategories: SkillCategory[] = [
       { name: "Git", level: "core" },
       { name: "GitHub", level: "core" },
       { name: "Vercel", level: "core" },
-      { name: "Render", level: "strong" },
-      { name: "Jest", level: "strong" },
+      { name: "Vitest", level: "strong" },
       { name: "Integration testing", level: "strong" },
+      { name: "Docker", level: "strong" },
+      { name: "Render", level: "strong" },
+      { name: "Cloudflare R2", level: "working", aliases: ["R2"] },
     ],
   },
   {

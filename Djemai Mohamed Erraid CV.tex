@@ -1,0 +1,229 @@
+\documentclass[10pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{parskip}
+
+\geometry{
+  a4paper,
+  top=1.6cm,
+  bottom=1.6cm,
+  left=1.7cm,
+  right=1.7cm
+}
+
+% ── Colour palette ──────────────────────────────────────────
+\definecolor{accent}{RGB}{30, 64, 120}      % deep navy blue
+\definecolor{accentlight}{RGB}{220, 230, 245}
+\definecolor{textprimary}{RGB}{20, 20, 20}
+\definecolor{textsecondary}{RGB}{90, 90, 90}
+\definecolor{rulecol}{RGB}{30, 64, 120}
+
+% ── Hyperref ────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  urlcolor=accent,
+  linkcolor=accent,
+  pdfborder={0 0 0},
+  pdftitle={DJEMAI Mohamed Erraid - CV},
+  pdfauthor={DJEMAI Mohamed Erraid}
+}
+
+% ── Section titles ──────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{accent}}
+  {}
+  {0em}
+  {}
+  [\vspace{1pt}\color{rulecol}\titlerule\vspace{2pt}]
+
+\titlespacing{\section}{0pt}{9pt}{4pt}
+
+% ── List settings ───────────────────────────────────────────
+\setlist[itemize]{
+  leftmargin=1.2em,
+  itemsep=1pt,
+  parsep=0pt,
+  topsep=2pt
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\pagestyle{empty}
+\color{textprimary}
+
+% ── Helper commands ─────────────────────────────────────────
+
+% Entry: role | org | date | sub-line (optional)
+\newcommand{\cventry}[4]{%
+  \noindent
+  \begin{tabular*}{\linewidth}{@{}l@{\extracolsep{\fill}}r@{}}
+    \textbf{#1} \textbullet\ \textit{#2} & \textcolor{textsecondary}{\small #3}
+  \end{tabular*}%
+  \ifx&#4&\else\\\textcolor{textsecondary}{\small #4}\fi%
+  \vspace{1pt}%
+}
+
+% Project header: name | role | stack | link (link may be empty)
+\newcommand{\cvproject}[4]{%
+  \noindent
+  \textbf{#1}\ \textcolor{textsecondary}{\small #2}%
+  \hfill\textcolor{textsecondary}{\small\textit{#3}}%
+  \ifx&#4&\else\ \textcolor{accent}{\small #4}\fi\\[2pt]%
+}
+
+% Skill row
+\newcommand{\skillrow}[2]{%
+  \textbf{\small #1} & {\small #2}\\[2pt]%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% ── HEADER ──────────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries\color{accent} DJEMAI Mohamed Erraid}\\[4pt]
+  {\large\color{textsecondary} Freelance Full-Stack Web Developer \ $\cdot$\ Software Engineering Student, ESI Algiers}\\[6pt]
+  \small
+  \textcolor{textsecondary}{
+    Algiers, Algeria
+    \quad$|$\quad
+    +213\,776\,262\,511
+    \quad$|$\quad
+    \href{mailto:nm_djemai@esi.dz}{nm\_djemai@esi.dz}
+  }\\[2pt]
+  \small
+  \href{https://www.linkedin.com/in/djemai-mohamed-erraid-3835862b8}{linkedin.com/in/djemai-mohamed-erraid}
+  \quad$|$\quad
+  \href{https://github.com/Erraid7}{github.com/Erraid7}
+  \quad$|$\quad
+  \href{https://djemai-erraid.vercel.app}{djemai-erraid.vercel.app}
+\end{center}
+
+\vspace{2pt}
+
+%% ── PROFESSIONAL SUMMARY ─────────────────────────────────
+\section{Professional Summary}
+
+Freelance full-stack web developer and 4th-year Software Engineering (SIL) student at ESI Algiers who ships production systems rather than class exercises. Builds client systems end to end --- a live pharmacy coordination platform and a confidential Arabic mini-ERP on Fastify, PostgreSQL, and Redis/BullMQ --- and recently completed an AI/Backend engineering internship at Alias Agency, co-building a grounded, multilingual recommendation assistant. Led ESI Flow as team lead of a 5-member team, is building Khatma, a Quran memorization platform, solo, and previously served as president of CSE, a 1,000+ member student tech club.
+
+%% ── TECHNICAL SKILLS ─────────────────────────────────────
+\section{Technical Skills}
+
+\vspace{3pt}
+\begin{tabular}{@{}>{\bfseries\small}p{3.2cm}@{\hspace{8pt}}p{\dimexpr\linewidth-3.2cm-8pt}@{}}
+  \skillrow{Frontend}{Next.js, React, TypeScript, JavaScript (ES6+), Tailwind CSS, TanStack Query, HTML5, CSS3}
+  \skillrow{Backend}{Node.js, Express.js, Fastify, Django, Django REST Framework, REST API design, JWT authentication, Zod, BullMQ}
+  \skillrow{Databases}{PostgreSQL, Prisma ORM, Sequelize, SQL schema design, Redis, MongoDB / Mongoose, pgvector}
+  \skillrow{AI \& Agents}{Python, LLM APIs, multi-agent systems, semantic search \& RAG, Ollama}
+  \skillrow{Testing \& DevOps}{Vitest, integration testing, Docker, Git, GitHub, Vercel, Render, Cloudflare R2}
+  \skillrow{Other}{Java, JavaFX, Figma (design systems, component libraries)}
+\end{tabular}
+
+%% ── EXPERIENCE ───────────────────────────────────────────
+\section{Experience}
+
+\cventry{Freelance Full-Stack Web Developer}{Independent}{2025 -- Present}{}
+\begin{itemize}
+  \item \textbf{PharmaFlow} (live, \href{https://pharmacy-product-platform.vercel.app}{pharmacy-product-platform.vercel.app}): built a mobile-first platform where pharmacy staff flag missing products from their phones and the manager orders from one centralized list --- a Next.js 16 frontend and a separate Express 5 / MongoDB API with JWT auth over HttpOnly cookies, Admin/Worker roles, Zod validation, and rate limiting
+  \item \textbf{Confidential organisation platform}: rebuilt a private organisation's Arabic, right-to-left mini-ERP from scratch --- members, a multi-level executive hierarchy with territory-scoped role-based access, and files --- on Fastify, Prisma, and PostgreSQL
+  \item Took slow work off the request path with Redis-backed BullMQ workers (notification fan-out, virus scanning, email, exports), built in Prometheus and OpenTelemetry observability, and wrote 240+ tests running against real Postgres, Redis, and object storage
+\end{itemize}
+
+\vspace{3pt}
+
+\cventry{AI/Backend Engineering Intern}{Alias Agency}{07/2026 -- 09/2026}{}
+\begin{itemize}
+  \item Co-built, in a two-intern team, a grounded multilingual (French/English/Arabic, incl. basic Darija) conversational assistant that turns plain-language trip requests into real, bookable tours for a client's tourism platform --- a Django/DRF app and React chat widget designed to drop into the client's codebase without modifying it
+  \item Designed hybrid retrieval (database hard filters + multilingual semantic re-ranking via pgvector), lifting precision@3 on vague requests from 20\% to 46\%; multi-turn context reached 92\% intent accuracy on follow-up turns
+  \item Shipped grounding guardrails that validate every recommendation against the live database, streamed (SSE) responses, and a 1,400+ test suite; all 3 acceptance scenarios pass, including the case where the correct answer is to recommend nothing
+\end{itemize}
+
+\vspace{3pt}
+
+\cventry{President}{Club Scientifique de l'ESI (CSE)}{08/2025 -- 08/2026}{}
+\begin{itemize}
+  \item Led a 1,000+ member organisation across 10 departments through strategic planning, budget management, and Agile team coordination
+  \item Delivered DATAHACK 3 (season 2025/2026), the year's flagship event, overseeing its organisation end to end with a cross-departmental team
+  \item Drove new project launches, inter-club partnerships, and a structured workshop programme for ESI students
+\end{itemize}
+
+\vspace{3pt}
+
+\cventry{Mentor}{HACKIN 7.0 Hackathon \& DevSprint}{2024 -- 2025}{}
+\begin{itemize}
+  \item Coached student teams on full-stack architecture decisions, REST API design, and sprint-based delivery under competition conditions
+\end{itemize}
+
+\vspace{3pt}
+
+\cventry{Logistics Manager --- RELEV Dept.}{Club Scientifique de l'ESI (CSE)}{08/2024 -- 07/2025}{}
+\begin{itemize}
+  \item Delivered DATAHACK 2 --- the largest edition at the time, with 120 participants --- by coordinating a 50-person organising committee across scheduling, venue logistics, and on-the-day operations
+\end{itemize}
+
+\vspace{3pt}
+
+\cventry{Workshop Instructor \& Multimedia Member}{Club Scientifique de l'ESI (CSE)}{11/2023 -- 07/2024}{}
+\begin{itemize}
+  \item Designed and delivered 5 technical workshops (C, Pascal, HTML/CSS/JS, Back-End, GitHub) to groups of $\sim$20 ESI students, building all curriculum and exercises from scratch; supported club media and the organisation of DATAHACK 1
+\end{itemize}
+
+%% ── PROJECTS ─────────────────────────────────────────────
+\section{Projects}
+
+\cvproject{ESI Flow}{Team Lead}{Next.js, Express.js, Sequelize, PostgreSQL, JWT}{\href{https://esi-flow.vercel.app}{esi-flow.vercel.app}}
+\begin{itemize}
+  \item Led a 5-member team through system design, database architecture, and Agile delivery of a live multi-role maintenance-request platform for ESI, used by staff and students, technicians, and admins
+  \item Wrote most of the Express/PostgreSQL backend: JWT-secured role-based access for 3 roles, the Sequelize data model, and scheduled jobs that open periodic and seasonal maintenance requests automatically, with email notifications; deployed on Vercel and Render
+\end{itemize}
+
+\vspace{4pt}
+
+\cvproject{Khatma}{Solo Developer}{Next.js, TypeScript, Fastify, Prisma, PostgreSQL, PWA}{\href{https://h1.nu/khatma-demo}{h1.nu/khatma-demo}}
+\begin{itemize}
+  \item Designing and building a Quran memorization platform alone, around a strict ijaza-verification workflow so only qualified teachers can supervise students
+  \item Shipped a frontend-only demo of the full vision (every role, on an in-browser mock engine) and built the V1 backend for the self-managed student workflow: Fastify, Prisma/PostgreSQL (22 data models), session-based auth with Argon2, and 500+ automated tests
+\end{itemize}
+
+\vspace{4pt}
+
+\cvproject{Refactoring Swarm}{}{Python, LLM APIs, Multi-agent systems}{\href{https://github.com/Erraid7/Refactoring-Swarm-Equipe-24}{GitHub}}
+\begin{itemize}
+  \item Built an autonomous 4-agent pipeline (Auditor, Fixer, Tester, Documenter) that analyses Python code quality, applies refactors, generates tests, and updates documentation without human intervention
+  \item Applied swarm-intelligence principles to coordinate LLM-powered agents with clearly separated responsibilities, so each agent's output becomes verified input for the next
+\end{itemize}
+
+\vspace{4pt}
+
+\cvproject{ESI Run}{}{Java, JavaFX, Maven}{\href{https://github.com/Erraid7/javaFX_project}{GitHub}}
+\begin{itemize}
+  \item Built a desktop public-transportation management system --- user accounts, pass issuance and validation, and complaint handling --- implementing the full business logic in Java/JavaFX with CSV-based persistence
+  \item Wrote test harnesses covering the user, pass, complaint, and persistence flows, including save-and-reload round trips of every record type
+\end{itemize}
+
+%% ── EDUCATION ────────────────────────────────────────────
+\section{Education}
+
+\cventry{Engineering Degree in Computer Science}{ESI --- \'Ecole Nationale Sup\'erieure d'Informatique, Algiers}{2023 -- 2028}{Software Engineering (SIL) specialisation --- currently in 4th year (2026/2027)}
+
+%% ── LANGUAGES ────────────────────────────────────────────
+\section{Languages}
+
+\noindent\small
+\textbf{Arabic} \ (Native)
+\quad$\cdot$\quad
+\textbf{French} \ (Professional)
+\quad$\cdot$\quad
+\textbf{English} \ (Professional --- primary working language)
+
+\end{document}

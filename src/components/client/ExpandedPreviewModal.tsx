@@ -139,7 +139,7 @@ export function ExpandedPreviewModal({
         <div className="relative flex-1 overflow-y-auto p-6">
           {isProject ? (
             <div key={project.id} className="animate-fade-up">
-              <ProjectPreview project={project} />
+              <ProjectPreview project={project} caseStudyOpen />
             </div>
           ) : (
             <pre className="mono whitespace-pre-wrap text-sm text-foreground/80">

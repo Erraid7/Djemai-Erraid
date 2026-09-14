@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, ImageOff, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImageOff, Lock, Play } from "lucide-react";
 import type { MediaItem } from "@/lib/types";
 import { optimizedMedia, placeholderMedia } from "@/lib/media";
 import { cn } from "@/lib/utils";
@@ -9,9 +9,12 @@ import { cn } from "@/lib/utils";
 export function MediaGallery({
   media,
   fallbackReason,
+  placeholder,
 }: {
   media: MediaItem[];
   fallbackReason?: string;
+  /** When there's no media, draw a designed card from this instead of an empty box. */
+  placeholder?: { title: string; stack: string[] };
 }) {
   const [i, setI] = useState(0);
   // Only slides the user has actually reached get an <img> in the DOM. All
@@ -33,6 +36,15 @@ export function MediaGallery({
   );
 
   if (media.length === 0) {
+    if (placeholder) {
+      return (
+        <BlueprintPlaceholder
+          title={placeholder.title}
+          stack={placeholder.stack}
+          reason={fallbackReason}
+        />
+      );
+    }
     return (
       <div className="flex min-h-55 flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface-2 px-6 py-10 text-center">
         <ImageOff className="mb-3 h-6 w-6 text-muted-foreground" />
@@ -200,5 +212,62 @@ function NavButton({
     >
       <Icon className="h-4 w-4" />
     </button>
+  );
+}
+
+/**
+ * For confidential or internship work with nothing that may be shown. An
+ * intentional-looking "blueprint" card reads as a deliberate choice; an empty
+ * dashed box reads as something that failed to load.
+ */
+function BlueprintPlaceholder({
+  title,
+  stack,
+  reason,
+}: {
+  title: string;
+  stack: string[];
+  reason?: string;
+}) {
+  const initials = title
+    .split(/[\s-]+/)
+    .filter((w) => /^[A-Za-z]/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0]!.toUpperCase())
+    .join("");
+
+  return (
+    <div className="relative flex min-h-64 w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-border bg-surface-2 px-6 py-8 text-center elev-2 lg:aspect-16/10 lg:min-h-0">
+      <div aria-hidden className="app-grid absolute inset-0 opacity-80" />
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl"
+      />
+      {/* Corner ticks, like a drawing sheet. */}
+      {["left-3 top-3 border-l border-t", "right-3 top-3 border-r border-t", "bottom-3 left-3 border-b border-l", "bottom-3 right-3 border-b border-r"].map((pos) => (
+        <span key={pos} aria-hidden className={cn("absolute h-3 w-3 border-primary/40", pos)} />
+      ))}
+
+      <div className="mono relative flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/30 bg-background/70 text-lg font-semibold text-primary elev-2">
+        {initials || "·"}
+      </div>
+      <div className="relative mt-3 text-base font-semibold text-foreground">{title}</div>
+      <div className="relative mt-3 flex max-w-md flex-wrap justify-center gap-1.5">
+        {stack.slice(0, 5).map((s) => (
+          <span
+            key={s}
+            className="mono rounded border border-border bg-background/60 px-1.5 py-0.5 text-[11.5px] text-foreground/75"
+          >
+            {s}
+          </span>
+        ))}
+      </div>
+      {reason ? (
+        <p className="relative mt-4 inline-flex max-w-sm items-start gap-1.5 text-[13px] leading-snug text-muted-foreground">
+          <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          {reason}
+        </p>
+      ) : null}
+    </div>
   );
 }

@@ -77,10 +77,10 @@ Open http://localhost:3000.
 
 ## The core mechanic: pinned vs. hidden projects
 
-`GET /api/projects` always returns **all 7** projects (pinned and hidden
-alike) -- but `src/lib/collections.ts` (the sidebar) only lists the 5 pinned
-ones individually. Editing the URL bar from `/api/projects/1` to
-`/api/projects/6` reveals a project that was never in the sidebar.
+`GET /api/projects` always returns **all 8** projects (pinned and hidden
+alike) -- but `src/lib/collections.ts` (the sidebar) only lists the 7 pinned
+ones individually. Editing the URL bar to `/api/projects/7` reveals a
+project that was never in the sidebar.
 
 ## Editing content
 
